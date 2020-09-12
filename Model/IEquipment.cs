@@ -1,0 +1,12 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Model
+{
+    interface IEquipment
+    {
+        public int Quality { get; set; }
+
+    }
+}
