@@ -4,12 +4,12 @@ using System.Text;
 
 namespace Model
 {
-    class Track
+    public class Track
     {
         public string Name { get; set; }
         public LinkedList<Section> Sections = new LinkedList<Section>();
 
-        public Track(string name, SectionTypes[] sections)
+        public Track(string name)
         {
             this.Name = name;
         }

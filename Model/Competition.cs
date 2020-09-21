@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Model
 {
-    class Competition<Track>
+    public class Competition
     {
         public List<IParticipant> Participants { get; set; }
         public Queue<Track> Tracks = new Queue<Track>();

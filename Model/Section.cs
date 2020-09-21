@@ -4,8 +4,13 @@ using System.Text;
 
 namespace Model
 {
-    class Section
+    public class Section
     {
         public SectionTypes SectionType { get; set; }
+        
+        public Section(SectionTypes sectionType)
+        {
+            this.SectionType = sectionType;
+        }
     }
 }
