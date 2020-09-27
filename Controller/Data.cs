@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using Model;
 
 namespace Controller
 {
-    static class Data
+    public static class Data
     {
         public static Competition competition { get; set; }
+        public static Race CurrentRace { get; set; }
 
         public static void Initialize()
         {
@@ -52,6 +54,14 @@ namespace Controller
             simpleTrack.Sections.AddLast(finish);
 
             competition.Tracks.Enqueue(simpleTrack);
+        }
+
+        public static void NextRace()
+        {
+            if(competition.NextTrack() != null)
+            {
+                CurrentRace = new Race(competition.NextTrack(), competition.Participants);
+            }
         }
 
     }
