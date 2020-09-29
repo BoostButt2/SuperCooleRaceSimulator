@@ -33,25 +33,9 @@ namespace Controller
 
         public static void addTrack()
         {
-            Section start = new Section(SectionTypes.StartGrid);
-            Section straight = new Section(SectionTypes.Straight);
-            Section right1 = new Section(SectionTypes.RightCorner);
-            Section right2 = new Section(SectionTypes.RightCorner);
-            Section straight2 = new Section(SectionTypes.Straight);
-            Section right3 = new Section(SectionTypes.RightCorner);
-            Section right4 = new Section(SectionTypes.RightCorner);
-            Section finish = new Section(SectionTypes.Finish);
+            SectionTypes[] sections = { SectionTypes.StartGrid, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.RightCorner, SectionTypes.Finish };
 
-            Track simpleTrack = new Track("Simple track");
-
-            simpleTrack.Sections.AddLast(start);
-            simpleTrack.Sections.AddLast(straight);
-            simpleTrack.Sections.AddLast(right1);
-            simpleTrack.Sections.AddLast(right2);
-            simpleTrack.Sections.AddLast(straight2);
-            simpleTrack.Sections.AddLast(right3);
-            simpleTrack.Sections.AddLast(right4);
-            simpleTrack.Sections.AddLast(finish);
+            Track simpleTrack = new Track("Simple track", sections);
 
             competition.Tracks.Enqueue(simpleTrack);
         }
