@@ -10,6 +10,9 @@ namespace Model
         LeftCorner,
         RightCorner,
         StartGrid,
-        Finish
+        Finish,
+        StraightVertical,
+        StartVertical,
+        FinishVertical
     }
 }
