@@ -33,7 +33,7 @@ namespace Controller
 
         public static void addTrack()
         {
-            SectionTypes[] sections = { SectionTypes.StartGrid, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.RightCorner, SectionTypes.Finish };
+            SectionTypes[] sections = { SectionTypes.StartGrid, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.LeftCorner, SectionTypes.Straight, SectionTypes.SuperRightCorner, SectionTypes.SuperLeftCorner, SectionTypes.Finish };
 
             Track simpleTrack = new Track("Simple track", sections);
 

@@ -14,6 +14,8 @@ namespace Controller
         private Random _random;
         private Dictionary<Section, SectionData> _positions;
 
+        public SectionData sectionData = new SectionData();
+
         public Race(Track t, List<IParticipant> IP)
         {
             this.Track = t;
@@ -21,6 +23,10 @@ namespace Controller
             for(int i = 0; i < this.Participants.Count; i++)
             {
                 this.Participants[i] = IP[i];
+            }
+            foreach(Driver driver in IP)
+            {
+                placeParticipant(t, driver);
             }
 
             _random = new Random(DateTime.Now.Millisecond);
@@ -47,5 +53,28 @@ namespace Controller
                 driver.Equipment.Performance = _random.Next();
             }
         }
+
+
+        //kijk of er een startgrid is, 
+        public void placeParticipant(Track track, Driver participant)
+        {
+            if (sectionData.Left == null)
+            {
+                sectionData.Left = participant;
+            }
+            if (sectionData.Left != null)
+            {
+                sectionData.Right = participant;
+            }
+            foreach (Section sect in track.Sections)
+            {
+                if (sect.SectionType == SectionTypes.StartGrid || sect.SectionType == SectionTypes.StartVertical)
+                {
+                    _positions.Add(sect, sectionData);
+                }
+            }
+        }
+
     }
+
 }

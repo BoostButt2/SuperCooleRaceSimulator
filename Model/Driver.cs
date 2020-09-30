@@ -8,6 +8,7 @@ namespace Model
     {
         public string Name { get; set; }
         public int Points { get; set; }
+        public string DriverDude { get; set; }
         public IEquipment Equipment { get; set; }
         public TeamColors TeamColor { get; set; }
 

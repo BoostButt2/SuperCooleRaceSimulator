@@ -8,7 +8,9 @@ namespace Model
     {
         Straight,
         LeftCorner,
+        SuperLeftCorner,
         RightCorner,
+        SuperRightCorner,
         StartGrid,
         Finish,
         StraightVertical,
