@@ -49,7 +49,7 @@ namespace SuperCooleRace
                         }
                         Console.Write("\n");
                     }
-
+                    //Als alle sections van de eerste rij zijn geprint, wordt de array leeg gemaakt om ruimte te maken voor een nieuwe rij
                     sectionArrays.Clear();
                 }
 

@@ -25,13 +25,13 @@ namespace SuperCooleRace
 
             Track simpleTrack = new Track("Simple track", sections);
 
-            SectionTypes[] testSections = {SectionTypes.Finish, SectionTypes.Straight, SectionTypes.StartGrid, SectionTypes.NextLine, SectionTypes.RightCorner };
+            SectionTypes[] testSections = {SectionTypes.Finish, SectionTypes.Straight, SectionTypes.StartGrid, SectionTypes.NextLine};
             Track testTrack = new Track("Test track", testSections);
 
             Visualisation.DrawTrack(testTrack);
             Console.WriteLine("________________________________________________________________");
 
-            Visualisation.DrawTrackTest(simpleTrack);
+            Visualisation.DrawTrack(simpleTrack);
 
         }
     }
