@@ -21,11 +21,17 @@ namespace SuperCooleRace
             //    Thread.Sleep(100);
             //}
 
-            SectionTypes[] sections = { SectionTypes.StartGrid, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.LeftCorner, SectionTypes.Straight, SectionTypes.SuperRightCorner, SectionTypes.SuperLeftCorner, SectionTypes.Finish };
+            SectionTypes[] sections = { SectionTypes.SuperLeftCorner, SectionTypes.Finish, SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.NextLine, SectionTypes.SuperRightCorner, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.LeftCorner, SectionTypes.NextLine };
 
             Track simpleTrack = new Track("Simple track", sections);
 
-            Visualisation.DrawTrack(simpleTrack);
+            SectionTypes[] testSections = {SectionTypes.Finish, SectionTypes.Straight, SectionTypes.StartGrid, SectionTypes.NextLine, SectionTypes.RightCorner };
+            Track testTrack = new Track("Test track", testSections);
+
+            Visualisation.DrawTrack(testTrack);
+            Console.WriteLine("________________________________________________________________");
+
+            Visualisation.DrawTrackTest(simpleTrack);
 
         }
     }

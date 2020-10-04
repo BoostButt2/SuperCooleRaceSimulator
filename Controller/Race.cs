@@ -2,9 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Timers;
 
 namespace Controller
 {
+    public delegate void TimerEvent(object sender, EventArgs eventArgs);
+    public delegate void DriverEvent(object sender, DriversChangedEventArgs eventArgs);
     public class Race
     {
         public Track Track { get; set; }
@@ -15,6 +19,10 @@ namespace Controller
         private Dictionary<Section, SectionData> _positions;
 
         public SectionData sectionData = new SectionData();
+
+        public System.Timers.Timer timer;
+        public event TimerEvent TimerOn;
+        public event DriverEvent Driverschanged;
 
         public Race(Track t, List<IParticipant> IP)
         {
@@ -30,6 +38,11 @@ namespace Controller
             }
 
             _random = new Random(DateTime.Now.Millisecond);
+
+            timer = new System.Timers.Timer();
+            timer.Interval = 500;
+
+            timer.Elapsed += OnTimedEvent;
         }
 
         public SectionData GetSectionData(Section s)
@@ -73,6 +86,15 @@ namespace Controller
                     _positions.Add(sect, sectionData);
                 }
             }
+        }
+
+        public void Start()
+        {
+            timer.Start();
+        }
+
+        public void OnTimedEvent(object sender, EventArgs eventArgs)
+        {
         }
 
     }
