@@ -16,6 +16,7 @@ namespace Model
         StraightVertical,
         StartVertical,
         FinishVertical,
+        EmptyField,
         NextLine
     }
 }

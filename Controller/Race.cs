@@ -1,6 +1,7 @@
 ﻿using Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Timers;
@@ -21,11 +22,16 @@ namespace Controller
         public SectionData sectionData = new SectionData();
 
         public System.Timers.Timer timer;
+
+        private Section currentSection { get; set; }
+
         public event TimerEvent TimerOn;
         public event DriverEvent Driverschanged;
 
         public Race(Track t, List<IParticipant> IP)
         {
+            
+
             this.Track = t;
             
             for(int i = 0; i < this.Participants.Count; i++)
@@ -43,6 +49,15 @@ namespace Controller
             timer.Interval = 500;
 
             timer.Elapsed += OnTimedEvent;
+
+            //Zorgt ervoor dat de racers beginnen bij de startgrid
+            foreach(Section sect in t.Sections)
+            {
+                if(sect.SectionType == SectionTypes.StartGrid)
+                {
+                    currentSection = sect;
+                }
+            }
         }
 
         public SectionData GetSectionData(Section s)
@@ -92,9 +107,60 @@ namespace Controller
         {
             timer.Start();
         }
-
+        
         public void OnTimedEvent(object sender, EventArgs eventArgs)
         {
+        }
+
+        public void MoveDrivers()
+        {
+            int teller = 0;
+            Section[] sectionArray = Track.Sections.ToArray();
+            Queue<Section> hulpQueue = new Queue<Section>();
+            List<Section> jankyHulpList = new List<Section>();
+
+            //De array wordt omgezet naar een queue
+            foreach(Section sect in sectionArray)
+            {
+                hulpQueue.Enqueue(sect);
+            }
+
+            //Alle sectiontypes die voor de
+            foreach (Section peter in sectionArray)
+            {
+                if (peter.SectionType != SectionTypes.StartGrid)
+                {
+                    teller++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            //De sectiontypes die niet vooraan horen worden achteraan gezet
+            for(int i = 0; i < teller; i++)
+            {
+                hulpQueue.Enqueue(hulpQueue.Dequeue());
+            }
+
+            //De hulpQueue wordt in een list gestopt zodat die in sectionArray gestopt kan worden
+            int queueGrootte = hulpQueue.Count;
+            for(int i = 0; i < queueGrootte; i++)
+            {
+                jankyHulpList.Add(hulpQueue.Dequeue());
+            }
+
+            sectionArray = jankyHulpList.ToArray();
+
+
+            for (int i = 0; i < sectionArray.Length; i++)
+            {
+                if(currentSection.SectionType == sectionArray[i].SectionType)
+                {
+                    currentSection = sectionArray[i + 1];
+                }
+            }
         }
 
     }

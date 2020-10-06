@@ -30,6 +30,7 @@ namespace SuperCooleRace
         private static string[] _superRightCorner = {"|  -", "|   ", "|<> ", "----" };
         private static string[] _leftCorner = {"-  |", "   |", " <>|", "----" };
         private static string[] _superLeftCorner = {"----", "|   ", "|<> ", "|  -" };
+        private static string[] _emptyField = { "    ", "    ", "    ", "    " };
       
 
         #endregion
@@ -51,6 +52,18 @@ namespace SuperCooleRace
                     }
                     //Als alle sections van de eerste rij zijn geprint, wordt de array leeg gemaakt om ruimte te maken voor een nieuwe rij
                     sectionArrays.Clear();
+                }
+
+                if (sect.SectionType == SectionTypes.EmptyField)
+                {
+                    foreach (string finish in _emptyField)
+                    {
+                        string sectionMetDriver = PlaceDriver(finish, driverLeft, driverRightt);
+                        hulpList.Add(sectionMetDriver);
+                    }
+                    string[] hulpArray = hulpList.ToArray();
+                    sectionArrays.Add(hulpArray);
+                    hulpList.Clear();
                 }
 
                 if (sect.SectionType == SectionTypes.Finish)
@@ -176,6 +189,8 @@ namespace SuperCooleRace
 
         public static string PlaceDriver(string s, IParticipant leftDriver, IParticipant rightDriver)
         {
+            string left = leftDriver.Name.Substring(0, 1);
+            string right = rightDriver.Name.Substring(0, 1);
             s = s.Replace("<", "L");
             s = s.Replace(">", "R");
             return s;
@@ -183,6 +198,7 @@ namespace SuperCooleRace
 
         public static void OnDriversChanged(object sender, DriversChangedEventArgs e)
         {
+
             DrawTrack(e.track);
             Data.CurrentRace.Driverschanged += OnDriversChanged;
         }
