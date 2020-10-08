@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Timers;
+using System.Transactions;
 
 namespace Controller
 {
@@ -13,6 +14,7 @@ namespace Controller
     public class Race
     {
         public Track Track { get; set; }
+        public Track ProperTrack { get; set; }
         public List<IParticipant> Participants = new List<IParticipant>();
         public DateTime StartTime { get; set; }
 
@@ -21,45 +23,54 @@ namespace Controller
 
         public SectionData sectionData = new SectionData();
 
-        public System.Timers.Timer timer;
+        private System.Timers.Timer timer;
 
-        private Section currentSection { get; set; }
+        public Section currentSection { get; set; }
 
         public event TimerEvent TimerOn;
         public event DriverEvent Driverschanged;
 
+        private Section[] _sectionArray;
+
+        private DriversChangedEventArgs driversChangedEventArgs = new DriversChangedEventArgs();
+
         public Race(Track t, List<IParticipant> IP)
         {
-            
-
+            Data.CurrentRace = this;
             this.Track = t;
-            
-            for(int i = 0; i < this.Participants.Count; i++)
-            {
-                this.Participants[i] = IP[i];
-            }
-            foreach(Driver driver in IP)
-            {
-                placeParticipant(t, driver);
-            }
+            driversChangedEventArgs.track = t;
 
-            _random = new Random(DateTime.Now.Millisecond);
-
-            timer = new System.Timers.Timer();
-            timer.Interval = 500;
-
-            timer.Elapsed += OnTimedEvent;
+            //for (int i = 0; i < this.Participants.Count; i++)
+            //{
+            //    this.Participants[i] = IP[i];
+            //}
+            //foreach(Driver driver in IP)
+            //{
+            //    placeParticipant(t, driver);
+            //}
 
             //Zorgt ervoor dat de racers beginnen bij de startgrid
-            foreach(Section sect in t.Sections)
+            foreach (Section sect in t.Sections)
             {
-                if(sect.SectionType == SectionTypes.StartGrid)
+                if (sect.SectionType == SectionTypes.StartGrid)
                 {
                     currentSection = sect;
                 }
             }
+
+            //SortSections();
+
+            _random = new Random(DateTime.Now.Millisecond);
+            SetTimer();
         }
 
+        public void SetTimer()
+        {
+            timer = new System.Timers.Timer(2000);
+            timer.Elapsed += OnTimedEvent;
+            timer.AutoReset = true;
+            timer.Enabled = true;
+        }
         public SectionData GetSectionData(Section s)
         {
             try
@@ -108,59 +119,109 @@ namespace Controller
             timer.Start();
         }
         
-        public void OnTimedEvent(object sender, EventArgs eventArgs)
+        public void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
+            MoveCurrentSection();
+
+            Driverschanged(sender, driversChangedEventArgs);
+
         }
 
-        public void MoveDrivers()
+        //public void SortSections()
+        //{
+        //    int teller = 0;
+        //    int nextLineTeller = 1;
+        //    _sectionArray = Track.Sections.ToArray();
+        //    Queue<Section> hulpQueue = new Queue<Section>();
+        //    Stack<Section> hulpStack = new Stack<Section>();
+        //    List<Section> jankyHulpList = new List<Section>();
+
+        //    //De array wordt omgezet naar een queue
+        //    foreach(Section sect in _sectionArray)
+        //    {
+        //        if(sect.SectionType == SectionTypes.NextLine)
+        //        {
+        //            nextLineTeller++;
+        //        }
+        //        if(nextLineTeller % 2 == 0 && sect.SectionType != SectionTypes.NextLine && sect.SectionType != SectionTypes.EmptyField)
+        //        {
+        //            hulpStack.Push(sect);
+        //        }
+        //        if (nextLineTeller % 2 != 0 && sect.SectionType != SectionTypes.NextLine && sect.SectionType != SectionTypes.EmptyField)
+        //        {
+        //            hulpQueue.Enqueue(sect);
+        //        }
+
+        //    }
+
+        //    //Alle sectiontypes die voor de
+        //    foreach (Section peter in _sectionArray)
+        //    {
+        //        if (peter.SectionType != SectionTypes.StartGrid)
+        //        {
+        //            teller++;
+        //        }
+        //        else
+        //        {
+        //            break;
+        //        }
+        //    }
+
+
+        //    //De hulpQueue wordt in een list gestopt zodat die in sectionArray gestopt kan worden
+        //    int queueGrootte = hulpQueue.Count + hulpStack.Count;
+        //    nextLineTeller = 0;
+        //    for(int i = teller; i < queueGrootte; i++)
+        //    {
+        //        if(_sectionArray[i].SectionType == SectionTypes.NextLine)
+        //        {
+        //            nextLineTeller++;
+        //        }
+        //        if(_sectionArray[i].SectionType != SectionTypes.NextLine && _sectionArray[i].SectionType != SectionTypes.EmptyField && nextLineTeller % 2 == 0)
+        //        {
+        //            jankyHulpList.Add(hulpStack.Pop());
+        //        }
+
+        //        if (_sectionArray[i].SectionType != SectionTypes.NextLine && _sectionArray[i].SectionType != SectionTypes.EmptyField && nextLineTeller % 2 != 0)
+        //        {
+
+        //            jankyHulpList.Add(hulpQueue.Dequeue());
+        //        }
+        //    }
+        //    //De sectiontypes die niet vooraan horen worden achteraan gezet
+        //    for (int i = 0; i < teller; i++)
+        //    {
+        //        jankyHulpList.Add(hulpQueue.Dequeue());
+        //    }
+
+        //    _sectionArray = jankyHulpList.ToArray();
+
+        //    foreach(Section s in _sectionArray)
+        //    {
+        //        Console.WriteLine(s.SectionType);
+        //    }
+        //}
+
+        int sectionTeller = 0;
+        public void MoveCurrentSection()
         {
-            int teller = 0;
-            Section[] sectionArray = Track.Sections.ToArray();
-            Queue<Section> hulpQueue = new Queue<Section>();
-            List<Section> jankyHulpList = new List<Section>();
+            sectionTeller++;
+            _sectionArray = ProperTrack.Sections.ToArray();
+            currentSection = _sectionArray[sectionTeller];
 
-            //De array wordt omgezet naar een queue
-            foreach(Section sect in sectionArray)
+            if (currentSection.SectionType == SectionTypes.Finish)
             {
-                hulpQueue.Enqueue(sect);
+                sectionTeller = -1;
             }
 
-            //Alle sectiontypes die voor de
-            foreach (Section peter in sectionArray)
-            {
-                if (peter.SectionType != SectionTypes.StartGrid)
-                {
-                    teller++;
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            //De sectiontypes die niet vooraan horen worden achteraan gezet
-            for(int i = 0; i < teller; i++)
-            {
-                hulpQueue.Enqueue(hulpQueue.Dequeue());
-            }
-
-            //De hulpQueue wordt in een list gestopt zodat die in sectionArray gestopt kan worden
-            int queueGrootte = hulpQueue.Count;
-            for(int i = 0; i < queueGrootte; i++)
-            {
-                jankyHulpList.Add(hulpQueue.Dequeue());
-            }
-
-            sectionArray = jankyHulpList.ToArray();
-
-
-            for (int i = 0; i < sectionArray.Length; i++)
-            {
-                if(currentSection.SectionType == sectionArray[i].SectionType)
-                {
-                    currentSection = sectionArray[i + 1];
-                }
-            }
+            //for (int i = 0; i < _sectionArray.Length; i++)
+            //{
+            //    if (currentSection.SectionType == _sectionArray[i].SectionType)
+            //    {
+            //        currentSection = _sectionArray[i + 1];
+            //        break;
+            //    }
+            //}
         }
 
     }

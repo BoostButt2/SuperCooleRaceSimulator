@@ -27,40 +27,40 @@ namespace ControllerTest
 
         }
 
-        [Test]
-        public void NextTrack_OneInQueue_ReturnTrack()
-        {
-            Track testTrack= new Track("TestTrack");
-            _competition.Tracks.Enqueue(testTrack);
+        //[Test]
+        //public void NextTrack_OneInQueue_ReturnTrack()
+        //{
+        //    Track testTrack= new Track("TestTrack");
+        //    _competition.Tracks.Enqueue(testTrack);
 
-            Track result = _competition.NextTrack();
-            Assert.AreEqual(testTrack, result);
-        }
+        //    Track result = _competition.NextTrack();
+        //    Assert.AreEqual(testTrack, result);
+        //}
 
-        [Test]
-        public void NextTrack_OneInQueue_RemoveTrackFromQueue()
-        {
-            Track testTrack2 = new Track("TestTrack2");
+        //[Test]
+        //public void NextTrack_OneInQueue_RemoveTrackFromQueue()
+        //{
+        //    Track testTrack2 = new Track("TestTrack2");
 
-            _competition.Tracks.Enqueue(testTrack2);
-            Track result = _competition.NextTrack();
-            result = _competition.NextTrack();
+        //    _competition.Tracks.Enqueue(testTrack2);
+        //    Track result = _competition.NextTrack();
+        //    result = _competition.NextTrack();
 
-            Assert.IsNull(result);
-        }
+        //    Assert.IsNull(result);
+        //}
 
-        [Test]
-        public void NextTrack_TwoInQueue_ReturnTrack()
-        {
-            Track testTrack = new Track("TestTrack");
-            _competition.Tracks.Enqueue(testTrack);
+        //[Test]
+        //public void NextTrack_TwoInQueue_ReturnTrack()
+        //{
+        //    Track testTrack = new Track("TestTrack");
+        //    _competition.Tracks.Enqueue(testTrack);
 
-            Track testTrack2 = new Track("TestTrack2");
-            _competition.Tracks.Enqueue(testTrack2);
+        //    Track testTrack2 = new Track("TestTrack2");
+        //    _competition.Tracks.Enqueue(testTrack2);
 
-            Track result = _competition.NextTrack();
-            result = _competition.NextTrack();
-            Assert.AreEqual(result, testTrack2);
-        }
+        //    Track result = _competition.NextTrack();
+        //    result = _competition.NextTrack();
+        //    Assert.AreEqual(result, testTrack2);
+        //}
     }
 }
