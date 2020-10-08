@@ -18,6 +18,8 @@ namespace Controller
         public List<IParticipant> Participants = new List<IParticipant>();
         public DateTime StartTime { get; set; }
 
+        private int lap = 0;
+
         private Random _random;
         private Dictionary<Section, SectionData> _positions;
 
@@ -25,7 +27,7 @@ namespace Controller
 
         private System.Timers.Timer timer;
 
-        public Section currentSection { get; set; }
+        public int currentSection { get; set; }
 
         public event TimerEvent TimerOn;
         public event DriverEvent Driverschanged;
@@ -40,25 +42,22 @@ namespace Controller
             this.Track = t;
             driversChangedEventArgs.track = t;
 
-            //for (int i = 0; i < this.Participants.Count; i++)
-            //{
-            //    this.Participants[i] = IP[i];
-            //}
-            //foreach(Driver driver in IP)
-            //{
-            //    placeParticipant(t, driver);
-            //}
+            currentSection = 0;
 
-            //Zorgt ervoor dat de racers beginnen bij de startgrid
-            foreach (Section sect in t.Sections)
+            //Plaatst elke racer op de startgrid
+            int teller = 0;
+            foreach(Driver participant in IP)
             {
-                if (sect.SectionType == SectionTypes.StartGrid)
+                if(teller < 2)
                 {
-                    currentSection = sect;
+                    participant.Position = 1;
                 }
+                else
+                {
+                    participant.Position = 0;
+                }
+                Participants.Add(participant);
             }
-
-            //SortSections();
 
             _random = new Random(DateTime.Now.Millisecond);
             SetTimer();
@@ -66,7 +65,7 @@ namespace Controller
 
         public void SetTimer()
         {
-            timer = new System.Timers.Timer(2000);
+            timer = new System.Timers.Timer(1000);
             timer.Elapsed += OnTimedEvent;
             timer.AutoReset = true;
             timer.Enabled = true;
@@ -121,6 +120,12 @@ namespace Controller
         
         public void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
+            if(lap == 2)
+            {
+                Console.WriteLine("Iemand wint!");
+                timer.Enabled = false;
+            }
+
             MoveCurrentSection();
 
             Driverschanged(sender, driversChangedEventArgs);
@@ -205,14 +210,38 @@ namespace Controller
         int sectionTeller = 0;
         public void MoveCurrentSection()
         {
-            sectionTeller++;
-            _sectionArray = ProperTrack.Sections.ToArray();
-            currentSection = _sectionArray[sectionTeller];
 
-            if (currentSection.SectionType == SectionTypes.Finish)
+            if (currentSection == Track.Sections.Count - 1)
             {
-                sectionTeller = -1;
+                foreach (Driver participant in Participants) {
+                    int speed = _random.Next();
+                    if (speed > 100 && speed < 900)
+                    {
+                        participant.Position++;
+                    }
+                    if (speed >= 900)
+                    {
+                        participant.Position += 2;
+                    }
+                }
+
+                currentSection = 0;
+                lap++;
+
             }
+
+            else
+            {
+                currentSection++;
+            }
+            //sectionTeller++;
+            //_sectionArray = Track.Sections.ToArray();
+            //currentSection = _sectionArray[sectionTeller];
+
+            //if (currentSection.SectionType == SectionTypes.Finish)
+            //{
+            //    sectionTeller = -1;
+            //}
 
             //for (int i = 0; i < _sectionArray.Length; i++)
             //{

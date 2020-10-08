@@ -28,25 +28,25 @@ namespace SuperCooleRace
             //    Thread.Sleep(100);
             //}
 
-            SectionTypes[] sections = { SectionTypes.SuperLeftCorner, SectionTypes.Finish, SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.NextLine, SectionTypes.SuperRightCorner, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.LeftCorner, SectionTypes.NextLine };
-            SectionTypes[] properSections = { SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.LeftCorner, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.SuperRightCorner, SectionTypes.SuperLeftCorner, SectionTypes.Finish };
+            SectionTypes[] properSections = { SectionTypes.StartGrid, SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.StraightVertical, SectionTypes.LeftCorner, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.SuperRightCorner, SectionTypes.StraightVertical, SectionTypes.SuperLeftCorner, SectionTypes.Finish };
+            //SectionTypes[] testSections = { SectionTypes.StartGrid, SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.StraightVertical, SectionTypes.LeftCorner, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.SuperRightCorner, SectionTypes.StraightVertical, SectionTypes.SuperLeftCorner, SectionTypes.Finish };
+            Track properTrack = new Track("proper", properSections);
+            //Track testTrack = new Track("test", testSections);
 
-            Track simpleTrack = new Track("Simple track", sections);
-            Track properTrack = new Track("proper", properSections)
-                ;
             Driver dimitri = new Driver("Dimitri");
             Driver totoro = new Driver("Totoro");
+            Driver megumin = new Driver("Megumin");
 
             List<IParticipant> drivers = new List<IParticipant>();
             drivers.Add(dimitri);
             drivers.Add(totoro);
+            drivers.Add(megumin);
             Race testRace = new Race(properTrack, drivers);
-            testRace.ProperTrack = properTrack;
             Visualisation.driverLeft = dimitri;
             Visualisation.driverRightt = totoro;
 
-            Visualisation.DrawTrack(simpleTrack);
-            //Visualisation.StartRace();
+            //Visualisation.DrawTrack(properTrack);
+            Visualisation.StartRace();
 
 
             while (true)
