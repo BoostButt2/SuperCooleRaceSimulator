@@ -30,8 +30,8 @@ namespace SuperCooleRace
 
             SectionTypes[] properSections = { SectionTypes.StartGrid, SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.StraightVertical, SectionTypes.LeftCorner, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.SuperRightCorner, SectionTypes.StraightVertical, SectionTypes.SuperLeftCorner, SectionTypes.Finish };
             //SectionTypes[] testSections = { SectionTypes.StartGrid, SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.StraightVertical, SectionTypes.LeftCorner, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.SuperRightCorner, SectionTypes.StraightVertical, SectionTypes.SuperLeftCorner, SectionTypes.Finish };
-            Track properTrack = new Track("proper", properSections);
-            //Track testTrack = new Track("test", testSections);
+            Track properTrack = new Track("Proper racetrack", properSections);
+            //Track testTrack = new Track("Test racetrack", testSections);
 
             Driver dimitri = new Driver("Dimitri");
             Driver totoro = new Driver("Totoro");

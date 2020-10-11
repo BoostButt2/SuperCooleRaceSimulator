@@ -247,12 +247,19 @@ namespace Controller
                     Section[] sections = Track.Sections.ToArray();
                     if(participantTeller %2 == 0)
                     {
-                        _positions[sections[sectionTeller]].Left = participant;
+                        if (_positions[sections[sectionTeller]].Left == null)
+                        {
+                            _positions[sections[sectionTeller]].Left = participant;
+                        }
                     }
 
                     if (participantTeller % 2 != 0)
                     {
-                        _positions[sections[sectionTeller]].Right = participant;
+                        if (_positions[sections[sectionTeller]].Right == null)
+                        {
+                            _positions[sections[sectionTeller]].Right = participant;
+                        }
+
                     }
                     participantTeller++;
                 }
