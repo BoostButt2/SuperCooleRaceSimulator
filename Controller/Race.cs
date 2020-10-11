@@ -21,7 +21,7 @@ namespace Controller
         private int lap = 0;
 
         private Random _random;
-        private Dictionary<Section, SectionData> _positions;
+        public Dictionary<Section, SectionData> _positions = new Dictionary<Section, SectionData>();
 
         public SectionData sectionData = new SectionData();
 
@@ -29,10 +29,8 @@ namespace Controller
 
         public int currentSection { get; set; }
 
-        public event TimerEvent TimerOn;
         public event DriverEvent Driverschanged;
 
-        private Section[] _sectionArray;
 
         private DriversChangedEventArgs driversChangedEventArgs = new DriversChangedEventArgs();
 
@@ -59,6 +57,11 @@ namespace Controller
                 Participants.Add(participant);
             }
 
+            foreach(Section sect in t.Sections)
+            {
+                GetSectionData(sect);
+            }
+
             _random = new Random(DateTime.Now.Millisecond);
             SetTimer();
         }
@@ -70,6 +73,8 @@ namespace Controller
             timer.AutoReset = true;
             timer.Enabled = true;
         }
+
+
         public SectionData GetSectionData(Section s)
         {
             try
@@ -124,6 +129,8 @@ namespace Controller
             {
                 Console.WriteLine("Iemand wint!");
                 timer.Enabled = false;
+                return;
+               
             }
 
             MoveCurrentSection();
@@ -208,12 +215,26 @@ namespace Controller
         //}
 
         int sectionTeller = 0;
+        int participantTeller = 0;
         public void MoveCurrentSection()
         {
-
+            foreach(KeyValuePair<Section, SectionData> entry in _positions)
+            {
+                entry.Value.Left = null;
+                entry.Value.Right = null;
+            }
+            
             if (currentSection == Track.Sections.Count - 1)
             {
-                foreach (Driver participant in Participants) {
+                currentSection = 0;
+                lap++;
+
+            }
+
+            else
+            {
+                foreach (Driver participant in Participants)
+                {
                     int speed = _random.Next();
                     if (speed > 100 && speed < 900)
                     {
@@ -223,15 +244,18 @@ namespace Controller
                     {
                         participant.Position += 2;
                     }
+                    Section[] sections = Track.Sections.ToArray();
+                    if(participantTeller %2 == 0)
+                    {
+                        _positions[sections[sectionTeller]].Left = participant;
+                    }
+
+                    if (participantTeller % 2 != 0)
+                    {
+                        _positions[sections[sectionTeller]].Right = participant;
+                    }
+                    participantTeller++;
                 }
-
-                currentSection = 0;
-                lap++;
-
-            }
-
-            else
-            {
                 currentSection++;
             }
             //sectionTeller++;

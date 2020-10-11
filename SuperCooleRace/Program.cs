@@ -51,7 +51,6 @@ namespace SuperCooleRace
 
             while (true)
             {
-                Thread.Sleep(200);
             }
 
         }

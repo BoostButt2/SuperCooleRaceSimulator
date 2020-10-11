@@ -57,7 +57,9 @@ namespace SuperCooleRace
                     {
                         Console.SetCursorPosition(Console.CursorLeft + 4, Console.CursorTop - 4);
                     }
-                    if (i == Data.CurrentRace.currentSection)
+                    //if (Data.CurrentRace._positions[p[i]].Left != null || Data.CurrentRace._positions[p[i]].Right != null)
+
+                        if (i == Data.CurrentRace.currentSection)
                     {
                         foreach (string section in _startHorizontal)
                         {
