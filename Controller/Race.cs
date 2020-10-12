@@ -40,26 +40,46 @@ namespace Controller
             this.Track = t;
             driversChangedEventArgs.track = t;
 
-            currentSection = 0;
+            //Vult de _positions dictionary
+            foreach (Section sect in t.Sections)
+            {
+                GetSectionData(sect);
+            }
 
             //Plaatst elke racer op de startgrid
             int teller = 0;
+            Section[] hulpArray = Track.Sections.ToArray();
             foreach(Driver participant in IP)
             {
                 if(teller < 2)
                 {
                     participant.Position = 1;
+                    if (_positions[hulpArray[1]].Left == null)
+                    {
+                        _positions[hulpArray[1]].Left = participant;
+                    }
+
+                    else if (_positions[hulpArray[1]].Right == null)
+                    {
+                        _positions[hulpArray[1]].Right = participant;
+                    }
+
                 }
                 else
                 {
                     participant.Position = 0;
+                    if (_positions[hulpArray[0]].Left == null)
+                    {
+                        _positions[hulpArray[0]].Left = participant;
+                    }
+
+                    else if (_positions[hulpArray[0]].Right == null)
+                    {
+                        _positions[hulpArray[0]].Right = participant;
+                    }
                 }
                 Participants.Add(participant);
-            }
-
-            foreach(Section sect in t.Sections)
-            {
-                GetSectionData(sect);
+                teller++;
             }
 
             _random = new Random(DateTime.Now.Millisecond);
@@ -68,7 +88,7 @@ namespace Controller
 
         public void SetTimer()
         {
-            timer = new System.Timers.Timer(1000);
+            timer = new System.Timers.Timer(2000);
             timer.Elapsed += OnTimedEvent;
             timer.AutoReset = true;
             timer.Enabled = true;
@@ -218,70 +238,67 @@ namespace Controller
         int participantTeller = 0;
         public void MoveCurrentSection()
         {
+            //Maakt alle posities van alle sections leeg
             foreach(KeyValuePair<Section, SectionData> entry in _positions)
             {
                 entry.Value.Left = null;
                 entry.Value.Right = null;
             }
-            
-            if (currentSection == Track.Sections.Count - 1)
-            {
-                currentSection = 0;
-                lap++;
 
-            }
-
-            else
-            {
-                foreach (Driver participant in Participants)
+            foreach (Driver participant in Participants)
                 {
-                    int speed = _random.Next();
+                    //Bepaalt hoeveel stappen een racer mag zetten
+                    int speed = new Random().Next(0, 999);
+                Random random = new Random();
                     if (speed > 100 && speed < 900)
                     {
-                        participant.Position++;
-                    }
-                    if (speed >= 900)
-                    {
-                        participant.Position += 2;
-                    }
-                    Section[] sections = Track.Sections.ToArray();
-                    if(participantTeller %2 == 0)
-                    {
-                        if (_positions[sections[sectionTeller]].Left == null)
-                        {
-                            _positions[sections[sectionTeller]].Left = participant;
-                        }
+                        participant.Position += random.Next(1, 3);
                     }
 
-                    if (participantTeller % 2 != 0)
-                    {
-                        if (_positions[sections[sectionTeller]].Right == null)
-                        {
-                            _positions[sections[sectionTeller]].Right = participant;
-                        }
-
-                    }
-                    participantTeller++;
+                if (speed >= 900)
+                {
+                    participant.Position += 2;
                 }
-                currentSection++;
-            }
-            //sectionTeller++;
-            //_sectionArray = Track.Sections.ToArray();
-            //currentSection = _sectionArray[sectionTeller];
 
-            //if (currentSection.SectionType == SectionTypes.Finish)
-            //{
-            //    sectionTeller = -1;
-            //}
+                //Als de racer een hele lap heeft gemaakt, moet hij beginnen aan een nieuwe lap
+                if (participant.Position > Track.Sections.Count - 1)
+                {
+                    participant.Position = participant.Position - (Track.Sections.Count - 1);
+                    participant.Lap++;
 
-            //for (int i = 0; i < _sectionArray.Length; i++)
-            //{
-            //    if (currentSection.SectionType == _sectionArray[i].SectionType)
-            //    {
-            //        currentSection = _sectionArray[i + 1];
-            //        break;
-            //    }
-            //}
+                }
+
+                Section[] sections = Track.Sections.ToArray();
+
+                    if (_positions[sections[participant.Position]].Left == null)
+                    {
+                        _positions[sections[participant.Position]].Left = participant;
+                    }
+
+                    else if(_positions[sections[participant.Position]].Right == null)
+                    {
+                        _positions[sections[participant.Position]].Right = participant;
+                    }
+
+                    else if(_positions[sections[participant.Position]].Right != null && _positions[sections[participant.Position]].Left != null)
+                    {
+                        participant.Position++;
+
+                        if (_positions[sections[participant.Position]].Left == null)
+                        {
+                            _positions[sections[participant.Position]].Left = participant;
+                        }
+
+                        else
+                        {
+                            _positions[sections[participant.Position]].Right = participant;
+                        }
+
+                    }
+
+                }
+            
+
         }
 
     }

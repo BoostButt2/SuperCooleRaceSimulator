@@ -10,8 +10,8 @@ namespace SuperCooleRace
 {
     public static class Visualisation
     {
-        public static IParticipant driverLeft;
-        public static IParticipant driverRightt;
+        public static IParticipant noDriverLinks;
+        public static IParticipant noDriverRechts;
         private static List<string[]> sectionArrays = new List<string[]>();
         private static List<string> hulpList = new List<string>();
 
@@ -41,6 +41,8 @@ namespace SuperCooleRace
             int right = 0;
             int superRight = 0;
             int left = 0;
+            noDriverLinks = new Driver("<");
+            noDriverRechts = new Driver(">");
 
             Section[] hulpArray = track.Sections.ToArray();
 
@@ -49,26 +51,75 @@ namespace SuperCooleRace
             {
                 if (hulpArray[i].SectionType == SectionTypes.StartGrid)
                 {
-                    if (i == 0)
+                    if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
                     {
-                        Console.SetCursorPosition(Console.CursorLeft + 24, Console.CursorTop);
-                    }
-                    else
-                    {
-                        Console.SetCursorPosition(Console.CursorLeft + 4, Console.CursorTop - 4);
-                    }
-                    //if (Data.CurrentRace._positions[p[i]].Left != null || Data.CurrentRace._positions[p[i]].Right != null)
+                        if (i == 0)
+                        {
+                            Console.SetCursorPosition(Console.CursorLeft + 24, Console.CursorTop);
+                        }
 
-                        if (i == Data.CurrentRace.currentSection)
-                    {
+                        if (i != 0)
+                        {
+                            Console.SetCursorPosition(Console.CursorLeft + 4, Console.CursorTop - 4);
+                        }
+
                         foreach (string section in _startHorizontal)
                         {
-                            Console.Write(PlaceDriver(section, driverLeft, driverRightt));
+                            Console.Write(PlaceDriver(section, Data.CurrentRace._positions[hulpArray[i]].Left, Data.CurrentRace._positions[hulpArray[i]].Right));
+                            Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop + 1);
+                        }
+                    }
+
+                    else if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right == null)
+                    {
+
+                        if (i == 0)
+                        {
+                            Console.SetCursorPosition(Console.CursorLeft + 24, Console.CursorTop);
+                        }
+
+                        if (i != 0)
+                        {
+                            Console.SetCursorPosition(Console.CursorLeft + 4, Console.CursorTop - 4);
+                        }
+
+                        foreach (string section in _startHorizontal)
+                        {
+                            Console.Write(PlaceDriver(section, Data.CurrentRace._positions[hulpArray[i]].Left, noDriverRechts));
+                            Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop + 1);
+                        }
+                    }
+                    else if (Data.CurrentRace._positions[hulpArray[i]].Left == null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                    {
+
+                        if (i == 0)
+                        {
+                            Console.SetCursorPosition(Console.CursorLeft + 24, Console.CursorTop);
+                        }
+
+                        if (i != 0)
+                        {
+                            Console.SetCursorPosition(Console.CursorLeft + 4, Console.CursorTop - 4);
+                        }
+
+                        foreach (string section in _startHorizontal)
+                        {
+                            Console.Write(PlaceDriver(section, noDriverLinks, Data.CurrentRace._positions[hulpArray[i]].Right));
                             Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop + 1);
                         }
                     }
                     else
                     {
+                        if (i == 0)
+                        {
+                            Console.SetCursorPosition(Console.CursorLeft + 24, Console.CursorTop);
+                        }
+
+                        if (i != 0)
+                        {
+                            Console.SetCursorPosition(Console.CursorLeft + 4, Console.CursorTop - 4);
+                        }
+
                         foreach (string section in _startHorizontal)
                         {
                             Console.Write(section);
@@ -80,14 +131,33 @@ namespace SuperCooleRace
                 if (hulpArray[i].SectionType == SectionTypes.Finish)
                 {
                     Console.SetCursorPosition(Console.CursorLeft + 4, Console.CursorTop - 4);
-                    if (i == Data.CurrentRace.currentSection)
+                    if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
                     {
                         foreach (string section in _finishHorizontal)
                         {
-                            Console.Write(PlaceDriver(section, driverLeft, driverRightt));
+                            Console.Write(PlaceDriver(section, Data.CurrentRace._positions[hulpArray[i]].Left, Data.CurrentRace._positions[hulpArray[i]].Right));
                             Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop + 1);
                         }
                     }
+
+                    else if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right == null)
+                    {
+                        foreach (string section in _finishHorizontal)
+                        {
+                            Console.Write(PlaceDriver(section, Data.CurrentRace._positions[hulpArray[i]].Left, noDriverRechts));
+                            Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop + 1);
+                        }
+                    }
+
+                    else if (Data.CurrentRace._positions[hulpArray[i]].Left == null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                    {
+                        foreach (string section in _finishHorizontal)
+                        {
+                            Console.Write(PlaceDriver(section, noDriverLinks, Data.CurrentRace._positions[hulpArray[i]].Right));
+                            Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop + 1);
+                        }
+                    }
+
                     else
                     {
                         foreach (string section in _finishHorizontal)
@@ -103,14 +173,33 @@ namespace SuperCooleRace
                     right = 1;
                     Console.SetCursorPosition(Console.CursorLeft + 4, Console.CursorTop - 4);
 
-                    if (i == Data.CurrentRace.currentSection)
+                    if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
                     {
                         foreach (string section in _rightCorner)
                         {
-                            Console.Write(PlaceDriver(section, driverLeft, driverRightt));
+                            Console.Write(PlaceDriver(section, Data.CurrentRace._positions[hulpArray[i]].Left, Data.CurrentRace._positions[hulpArray[i]].Right));
                             Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop + 1);
                         }
                     }
+
+                   else if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right == null)
+                    {
+                        foreach (string section in _rightCorner)
+                        {
+                            Console.Write(PlaceDriver(section, Data.CurrentRace._positions[hulpArray[i]].Left, noDriverRechts));
+                            Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop + 1);
+                        }
+                    }
+
+                    else if (Data.CurrentRace._positions[hulpArray[i]].Left == null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                    {
+                        foreach (string section in _rightCorner)
+                        {
+                            Console.Write(PlaceDriver(section, noDriverLinks, Data.CurrentRace._positions[hulpArray[i]].Right));
+                            Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop + 1);
+                        }
+                    }
+
                     else
                     {
                         foreach (string section in _rightCorner)
@@ -127,14 +216,33 @@ namespace SuperCooleRace
                     left = 0;
                     Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop - 4);
 
-                    if (i == Data.CurrentRace.currentSection)
+                    if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
                     {
                         foreach (string section in _superRightCorner)
                         {
-                            Console.Write(PlaceDriver(section, driverLeft, driverRightt));
+                            Console.Write(PlaceDriver(section, Data.CurrentRace._positions[hulpArray[i]].Left, Data.CurrentRace._positions[hulpArray[i]].Right));
                             Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop + 1);
                         }
                     }
+
+                    else if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right == null)
+                    {
+                        foreach (string section in _superRightCorner)
+                        {
+                            Console.Write(PlaceDriver(section, Data.CurrentRace._positions[hulpArray[i]].Left, noDriverRechts));
+                            Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop + 1);
+                        }
+                    }
+
+                    else if (Data.CurrentRace._positions[hulpArray[i]].Left == null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                    {
+                        foreach (string section in _superRightCorner)
+                        {
+                            Console.Write(PlaceDriver(section, noDriverLinks, Data.CurrentRace._positions[hulpArray[i]].Right));
+                            Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop + 1);
+                        }
+                    }
+
                     else
                     {
                         foreach (string section in _superRightCorner)
@@ -150,11 +258,29 @@ namespace SuperCooleRace
                     right = 0;
                     left = 1;
 
-                    if (i == Data.CurrentRace.currentSection)
+                    if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
                     {
                         foreach (string section in _leftCorner)
                         {
-                            Console.Write(PlaceDriver(section, driverLeft, driverRightt));
+                            Console.Write(PlaceDriver(section, Data.CurrentRace._positions[hulpArray[i]].Left, Data.CurrentRace._positions[hulpArray[i]].Right));
+                            Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop + 1);
+                        }
+                    }
+
+                    else if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right == null)
+                    {
+                        foreach (string section in _leftCorner)
+                        {
+                            Console.Write(PlaceDriver(section, Data.CurrentRace._positions[hulpArray[i]].Left, noDriverRechts));
+                            Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop + 1);
+                        }
+                    }
+
+                    else if (Data.CurrentRace._positions[hulpArray[i]].Left == null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                    {
+                        foreach (string section in _leftCorner)
+                        {
+                            Console.Write(PlaceDriver(section, noDriverLinks, Data.CurrentRace._positions[hulpArray[i]].Right));
                             Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop + 1);
                         }
                     }
@@ -179,14 +305,33 @@ namespace SuperCooleRace
 
                     }
 
-                    if (i == Data.CurrentRace.currentSection)
+                    if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
                     {
                         foreach (string section in _superLeftCorner)
                         {
-                            Console.Write(PlaceDriver(section, driverLeft, driverRightt));
+                            Console.Write(PlaceDriver(section, Data.CurrentRace._positions[hulpArray[i]].Left, Data.CurrentRace._positions[hulpArray[i]].Right));
                             Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop + 1);
                         }
                     }
+
+                    else if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right == null)
+                    {
+                        foreach (string section in _superLeftCorner)
+                        {
+                            Console.Write(PlaceDriver(section, Data.CurrentRace._positions[hulpArray[i]].Left, noDriverRechts));
+                            Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop + 1);
+                        }
+                    }
+
+                    else if (Data.CurrentRace._positions[hulpArray[i]].Left == null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                    {
+                        foreach (string section in _superLeftCorner)
+                        {
+                            Console.Write(PlaceDriver(section, noDriverLinks, Data.CurrentRace._positions[hulpArray[i]].Right));
+                            Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop + 1);
+                        }
+                    }
+
                     else
                     {
                         foreach (string section in _superLeftCorner)
@@ -209,14 +354,33 @@ namespace SuperCooleRace
                         Console.SetCursorPosition(Console.CursorLeft + 4, Console.CursorTop - 4);
                     }
 
-                    if (i == Data.CurrentRace.currentSection)
+                    if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
                     {
                         foreach (string section in _straightHorizontal)
                         {
-                            Console.Write(PlaceDriver(section, driverLeft, driverRightt));
+                            Console.Write(PlaceDriver(section, Data.CurrentRace._positions[hulpArray[i]].Left, Data.CurrentRace._positions[hulpArray[i]].Right));
                             Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop + 1);
                         }
                     }
+
+                    else if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right == null)
+                    {
+                        foreach (string section in _straightHorizontal)
+                        {
+                            Console.Write(PlaceDriver(section, Data.CurrentRace._positions[hulpArray[i]].Left, noDriverRechts));
+                            Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop + 1);
+                        }
+                    }
+
+                    else if (Data.CurrentRace._positions[hulpArray[i]].Left == null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                    {
+                        foreach (string section in _straightHorizontal)
+                        {
+                            Console.Write(PlaceDriver(section, noDriverLinks, Data.CurrentRace._positions[hulpArray[i]].Right));
+                            Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop + 1);
+                        }
+                    }
+
                     else
                     {
                         foreach (string section in _straightHorizontal)
@@ -233,11 +397,29 @@ namespace SuperCooleRace
                         Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop - 8);
                     }
 
-                    if (i == Data.CurrentRace.currentSection)
+                    if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
                     {
                         foreach (string section in _straightVertical)
                         {
-                            Console.Write(PlaceDriver(section, driverLeft, driverRightt));
+                            Console.Write(PlaceDriver(section, Data.CurrentRace._positions[hulpArray[i]].Left, Data.CurrentRace._positions[hulpArray[i]].Right));
+                            Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop + 1);
+                        }
+                    }
+
+                    else if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right == null)
+                    {
+                        foreach (string section in _straightVertical)
+                        {
+                            Console.Write(PlaceDriver(section, Data.CurrentRace._positions[hulpArray[i]].Left, noDriverRechts));
+                            Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop + 1);
+                        }
+                    }
+
+                    else if (Data.CurrentRace._positions[hulpArray[i]].Left == null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                    {
+                        foreach (string section in _straightVertical)
+                        {
+                            Console.Write(PlaceDriver(section, noDriverLinks, Data.CurrentRace._positions[hulpArray[i]].Right));
                             Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop + 1);
                         }
                     }
@@ -265,9 +447,9 @@ namespace SuperCooleRace
 
         public static void StartRace()
         {
-            DrawTrack(Data.CurrentRace.Track);
             DriversChangedEventArgs driversChangedEventArgs = new DriversChangedEventArgs();
             driversChangedEventArgs.track = Data.CurrentRace.Track;
+            DrawTrack(Data.CurrentRace.Track);
 
             Data.CurrentRace.Driverschanged += OnDriversChanged;
         }

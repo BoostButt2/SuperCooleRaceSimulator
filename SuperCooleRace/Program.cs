@@ -42,8 +42,6 @@ namespace SuperCooleRace
             drivers.Add(totoro);
             drivers.Add(megumin);
             Race testRace = new Race(properTrack, drivers);
-            Visualisation.driverLeft = dimitri;
-            Visualisation.driverRightt = totoro;
 
             //Visualisation.DrawTrack(properTrack);
             Visualisation.StartRace();
