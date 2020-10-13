@@ -38,6 +38,7 @@ namespace SuperCooleRace
         //Afhankelijk van de soort bocht wordt de cursor verplaatst
         public static void DrawTrack(Track track)
         {
+
             int right = 0;
             int superRight = 0;
             int left = 0;
@@ -214,7 +215,10 @@ namespace SuperCooleRace
                 {
                     superRight = 1;
                     left = 0;
-                    Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop - 4);
+                    if (right == 0)
+                    {
+                        Console.SetCursorPosition(Console.CursorLeft - 4, Console.CursorTop - 4);
+                    }
 
                     if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
                     {
@@ -392,6 +396,7 @@ namespace SuperCooleRace
                 }
                 if (hulpArray[i].SectionType == SectionTypes.StraightVertical)
                 {
+                    
                     if(superRight == 1)
                     {
                         Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop - 8);
@@ -452,12 +457,15 @@ namespace SuperCooleRace
             DrawTrack(Data.CurrentRace.Track);
 
             Data.CurrentRace.Driverschanged += OnDriversChanged;
+            Data.CurrentRace.NewRaceEvent += StartRace;
         }
+
+
         public static void OnDriversChanged(object sender, DriversChangedEventArgs e)
         {
             Console.Clear();
-            Console.WriteLine(e.track.Name);
-            DrawTrack(e.track);
+            Console.WriteLine(Data.CurrentRace.Track.Name);
+            DrawTrack(Data.CurrentRace.Track);
         }
 
         #region

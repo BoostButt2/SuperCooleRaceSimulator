@@ -11,14 +11,13 @@ namespace Controller
 {
     public delegate void TimerEvent(object sender, EventArgs eventArgs);
     public delegate void DriverEvent(object sender, DriversChangedEventArgs eventArgs);
+    public delegate void StartNewRaceEvent();
     public class Race
     {
         public Track Track { get; set; }
         public Track ProperTrack { get; set; }
         public List<IParticipant> Participants = new List<IParticipant>();
         public DateTime StartTime { get; set; }
-
-        private int lap = 0;
 
         private Random _random;
         public Dictionary<Section, SectionData> _positions = new Dictionary<Section, SectionData>();
@@ -30,7 +29,11 @@ namespace Controller
         public int currentSection { get; set; }
 
         public event DriverEvent Driverschanged;
+        public event StartNewRaceEvent NewRaceEvent;
 
+        private int baanTeller = 1;
+        public bool raceStoppen = false;
+        
 
         private DriversChangedEventArgs driversChangedEventArgs = new DriversChangedEventArgs();
 
@@ -88,7 +91,7 @@ namespace Controller
 
         public void SetTimer()
         {
-            timer = new System.Timers.Timer(750);
+            timer = new System.Timers.Timer(500);
             timer.Elapsed += OnTimedEvent;
             timer.AutoReset = true;
             timer.Enabled = true;
@@ -147,26 +150,41 @@ namespace Controller
         {
 
             MoveCurrentSection();
-            int teller = 0;
+            baanTeller = 0;
+
+            Driverschanged(sender, driversChangedEventArgs);
 
             //Kijkt of er nog iemand op de baan is
             foreach (KeyValuePair<Section, SectionData> entry in _positions)
             {
                 if (entry.Value.Right != null || entry.Value.Left != null)
                 {
-                    teller++;
+                    baanTeller++;
                 }
             }
 
-            Driverschanged(sender, driversChangedEventArgs);
-
             //Als her niemand op de baan is, wordt de timed event stopgezet
-            if (teller == 0)
+            if (baanTeller == 0)
             {
-                Console.WriteLine("Race is klaar");
-                timer.Enabled = false;
-                return;
+                if (raceStoppen)
+                {
+                    Driverschanged = delegate { };
+                    timer.Enabled = false;
+                    Console.WriteLine("Race is klaar");
+                }
+                else
+                {
+                    Driverschanged = delegate { };
+                    timer.Enabled = false;
+                    Console.Clear();
+                    Data.Initialize();
+                    Data.NextRace();
+                    Data.CurrentRace.raceStoppen = true;
+                    NewRaceEvent();
+                }
+
             }
+
         }
 
 
@@ -184,7 +202,7 @@ namespace Controller
                 //Bepaalt hoeveel stappen een racer mag zetten
                 int speed = new Random().Next(0, 999);
                 Random random = new Random();
-                if (speed > 100 && speed < 900)
+                if (speed < 900)
                 {
                     participant.Position += random.Next(1, 3);
                 }

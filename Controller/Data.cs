@@ -33,19 +33,16 @@ namespace Controller
 
         public static void addTrack()
         {
-            SectionTypes[] sections = { SectionTypes.StartGrid, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.LeftCorner, SectionTypes.Straight, SectionTypes.SuperRightCorner, SectionTypes.SuperLeftCorner, SectionTypes.Finish };
+            SectionTypes[] sections = { SectionTypes.StartGrid, SectionTypes.StartGrid, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.StraightVertical, SectionTypes.StraightVertical, SectionTypes.SuperRightCorner, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.LeftCorner, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.SuperRightCorner, SectionTypes.StraightVertical, SectionTypes.StraightVertical, SectionTypes.StraightVertical, SectionTypes.SuperLeftCorner, SectionTypes.Finish };
 
-            Track simpleTrack = new Track("Simple track", sections);
+            Track hardTrack = new Track("Hard track", sections);
 
-            competition.Tracks.Enqueue(simpleTrack);
+            competition.Tracks.Enqueue(hardTrack);
         }
 
         public static void NextRace()
         {
-            if(competition.NextTrack() != null)
-            {
-                CurrentRace = new Race(competition.NextTrack(), competition.Participants);
-            }
+                CurrentRace = new Race(competition.NextTrack(), competition.Participants);            
         }
 
     }
