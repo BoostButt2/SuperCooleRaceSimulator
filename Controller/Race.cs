@@ -88,7 +88,7 @@ namespace Controller
 
         public void SetTimer()
         {
-            timer = new System.Timers.Timer(2000);
+            timer = new System.Timers.Timer(750);
             timer.Elapsed += OnTimedEvent;
             timer.AutoReset = true;
             timer.Enabled = true;
@@ -145,97 +145,31 @@ namespace Controller
         
         public void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
-            if(lap == 2)
-            {
-                Console.WriteLine("Iemand wint!");
-                timer.Enabled = false;
-                return;
-               
-            }
 
             MoveCurrentSection();
+            int teller = 0;
+
+            //Kijkt of er nog iemand op de baan is
+            foreach (KeyValuePair<Section, SectionData> entry in _positions)
+            {
+                if (entry.Value.Right != null || entry.Value.Left != null)
+                {
+                    teller++;
+                }
+            }
 
             Driverschanged(sender, driversChangedEventArgs);
 
+            //Als her niemand op de baan is, wordt de timed event stopgezet
+            if (teller == 0)
+            {
+                Console.WriteLine("Race is klaar");
+                timer.Enabled = false;
+                return;
+            }
         }
 
-        //public void SortSections()
-        //{
-        //    int teller = 0;
-        //    int nextLineTeller = 1;
-        //    _sectionArray = Track.Sections.ToArray();
-        //    Queue<Section> hulpQueue = new Queue<Section>();
-        //    Stack<Section> hulpStack = new Stack<Section>();
-        //    List<Section> jankyHulpList = new List<Section>();
 
-        //    //De array wordt omgezet naar een queue
-        //    foreach(Section sect in _sectionArray)
-        //    {
-        //        if(sect.SectionType == SectionTypes.NextLine)
-        //        {
-        //            nextLineTeller++;
-        //        }
-        //        if(nextLineTeller % 2 == 0 && sect.SectionType != SectionTypes.NextLine && sect.SectionType != SectionTypes.EmptyField)
-        //        {
-        //            hulpStack.Push(sect);
-        //        }
-        //        if (nextLineTeller % 2 != 0 && sect.SectionType != SectionTypes.NextLine && sect.SectionType != SectionTypes.EmptyField)
-        //        {
-        //            hulpQueue.Enqueue(sect);
-        //        }
-
-        //    }
-
-        //    //Alle sectiontypes die voor de
-        //    foreach (Section peter in _sectionArray)
-        //    {
-        //        if (peter.SectionType != SectionTypes.StartGrid)
-        //        {
-        //            teller++;
-        //        }
-        //        else
-        //        {
-        //            break;
-        //        }
-        //    }
-
-
-        //    //De hulpQueue wordt in een list gestopt zodat die in sectionArray gestopt kan worden
-        //    int queueGrootte = hulpQueue.Count + hulpStack.Count;
-        //    nextLineTeller = 0;
-        //    for(int i = teller; i < queueGrootte; i++)
-        //    {
-        //        if(_sectionArray[i].SectionType == SectionTypes.NextLine)
-        //        {
-        //            nextLineTeller++;
-        //        }
-        //        if(_sectionArray[i].SectionType != SectionTypes.NextLine && _sectionArray[i].SectionType != SectionTypes.EmptyField && nextLineTeller % 2 == 0)
-        //        {
-        //            jankyHulpList.Add(hulpStack.Pop());
-        //        }
-
-        //        if (_sectionArray[i].SectionType != SectionTypes.NextLine && _sectionArray[i].SectionType != SectionTypes.EmptyField && nextLineTeller % 2 != 0)
-        //        {
-
-        //            jankyHulpList.Add(hulpQueue.Dequeue());
-        //        }
-        //    }
-        //    //De sectiontypes die niet vooraan horen worden achteraan gezet
-        //    for (int i = 0; i < teller; i++)
-        //    {
-        //        jankyHulpList.Add(hulpQueue.Dequeue());
-        //    }
-
-        //    _sectionArray = jankyHulpList.ToArray();
-
-        //    foreach(Section s in _sectionArray)
-        //    {
-        //        Console.WriteLine(s.SectionType);
-        //    }
-        //}
-
-        int sectionTeller = 0;
-        int participantTeller = 0;
         public void MoveCurrentSection()
         {
             //Maakt alle posities van alle sections leeg
@@ -246,14 +180,14 @@ namespace Controller
             }
 
             foreach (Driver participant in Participants)
-                {
-                    //Bepaalt hoeveel stappen een racer mag zetten
-                    int speed = new Random().Next(0, 999);
+            {
+                //Bepaalt hoeveel stappen een racer mag zetten
+                int speed = new Random().Next(0, 999);
                 Random random = new Random();
-                    if (speed > 100 && speed < 900)
-                    {
-                        participant.Position += random.Next(1, 3);
-                    }
+                if (speed > 100 && speed < 900)
+                {
+                    participant.Position += random.Next(1, 3);
+                }
 
                 if (speed >= 900)
                 {
@@ -268,19 +202,21 @@ namespace Controller
 
                 }
 
-                Section[] sections = Track.Sections.ToArray();
+                if (participant.Lap < 2)
+                {
+                    Section[] sections = Track.Sections.ToArray();
 
                     if (_positions[sections[participant.Position]].Left == null)
                     {
                         _positions[sections[participant.Position]].Left = participant;
                     }
 
-                    else if(_positions[sections[participant.Position]].Right == null)
+                    else if (_positions[sections[participant.Position]].Right == null)
                     {
                         _positions[sections[participant.Position]].Right = participant;
                     }
 
-                    else if(_positions[sections[participant.Position]].Right != null && _positions[sections[participant.Position]].Left != null)
+                    else if (_positions[sections[participant.Position]].Right != null && _positions[sections[participant.Position]].Left != null)
                     {
                         participant.Position++;
 
@@ -297,7 +233,12 @@ namespace Controller
                     }
 
                 }
-            
+
+                else if(participant.Lap >= 2)
+                {
+
+                }
+            }
 
         }
 
