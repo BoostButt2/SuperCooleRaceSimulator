@@ -445,6 +445,17 @@ namespace SuperCooleRace
         {
             string left = leftDriver.Name.Substring(0, 1);
             string right = rightDriver.Name.Substring(0, 1);
+
+            if (leftDriver.Equipment.IsBroken)
+            {
+                left = "^";
+            }
+
+            if (rightDriver.Equipment.IsBroken)
+            {
+                right = "^";
+            }
+
             s = s.Replace("<", left);
             s = s.Replace(">", right);
             return s;
@@ -454,6 +465,7 @@ namespace SuperCooleRace
         {
             DriversChangedEventArgs driversChangedEventArgs = new DriversChangedEventArgs();
             driversChangedEventArgs.track = Data.CurrentRace.Track;
+
             DrawTrack(Data.CurrentRace.Track);
 
             Data.CurrentRace.Driverschanged += OnDriversChanged;

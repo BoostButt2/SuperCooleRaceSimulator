@@ -21,6 +21,7 @@ namespace Model
         {
             this.Name = name;
             this.Lap = 0;
+            Equipment = new Car(0, 0, 0, false);
         }
     }
 }

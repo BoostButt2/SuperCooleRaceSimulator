@@ -1,6 +1,7 @@
 ﻿using Model;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -53,7 +54,7 @@ namespace Controller
             int teller = 0;
             Section[] hulpArray = Track.Sections.ToArray();
             foreach(Driver participant in IP)
-            {
+            {                
                 if(teller < 2)
                 {
                     participant.Position = 1;
@@ -148,6 +149,20 @@ namespace Controller
         
         public void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
+            foreach(IParticipant participant in Participants)
+            {
+                Random random = new Random();
+                int broken = random.Next(1, 13);
+                int notBroken = random.Next(1, 2);
+                if(broken == 4)
+                {
+                    participant.Equipment.IsBroken = true;
+                }
+                else if(notBroken == 1)
+                {
+                    participant.Equipment.IsBroken = false;
+                }
+            }
 
             MoveCurrentSection();
             baanTeller = 0;
@@ -197,20 +212,25 @@ namespace Controller
                 entry.Value.Right = null;
             }
 
+            
             foreach (Driver participant in Participants)
             {
-                //Bepaalt hoeveel stappen een racer mag zetten
-                int speed = new Random().Next(0, 999);
-                Random random = new Random();
-                if (speed < 900)
+                if (participant.Equipment.IsBroken == false)
                 {
-                    participant.Position += random.Next(1, 3);
+                    //Bepaalt hoeveel stappen een racer mag zetten
+                    int speed = new Random().Next(0, 999);
+                    Random random = new Random();
+                    if (speed < 900)
+                    {
+                        participant.Position += random.Next(1, 3);
+                    }
+
+                    if (speed >= 900)
+                    {
+                        participant.Position += 2;
+                    }
                 }
 
-                if (speed >= 900)
-                {
-                    participant.Position += 2;
-                }
 
                 //Als de racer een hele lap heeft gemaakt, moet hij beginnen aan een nieuwe lap
                 if (participant.Position > Track.Sections.Count - 1)
