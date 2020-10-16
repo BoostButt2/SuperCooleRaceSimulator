@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Model
 {
-    class Laptime
+    public class Laptime
     {
-        public string name { get; set; }
-        public TimeSpan time { get; set; }
+        public string Name { get; set; }
+        public TimeSpan Time { get; set; }
 
 
     }

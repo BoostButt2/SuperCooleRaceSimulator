@@ -22,9 +22,7 @@ namespace SuperCooleRace
 
         #region graphics
         private static string[] _finishHorizontal = { "----", " <# ", " ># ", "----" };
-        private static string[] _finishVertical = { "|  |", "|##|", "|<>|", "|  |" };
         private static string[] _startHorizontal = { "----", " <8 ", " >8 ", "----" };
-        private static string[] _startVertical = { "|  |", "|88|", "|<>|", "|  |" };
         private static string[] _straightHorizontal = {"----", "  < ", "  > ", "----" };
         private static string[] _straightVertical = {"|  |", "|  |", "|<>|", "|  |" };
         private static string[] _rightCorner = {"----", "   |", " <>|", "-  |" };
@@ -438,7 +436,11 @@ namespace SuperCooleRace
                         }
                     }
                 }
-            }           
+            }
+            if (Data.CurrentRace.KondigAan)
+            {
+                Console.WriteLine($"De eerste plek is behaald door {Data.DriversInOrder.GetBestDriver()}");
+            }
         }
 
         public static string PlaceDriver(string s, IParticipant leftDriver, IParticipant rightDriver)

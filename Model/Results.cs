@@ -4,9 +4,10 @@ using System.Text;
 
 namespace Model
 {
-    class Results
+    public class Results
     {
-        public string name { get; set; }
-        public int points { get; set; }
+        public string Name { get; set; }
+        public int Points { get; set; }
+
     }
 }

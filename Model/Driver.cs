@@ -13,7 +13,17 @@ namespace Model
         //De positie in de section List van Track
         public int Position { get; set; }
 
+        //Dit zijn de laps die de driver heeft gemaakt
         public int Lap { get; set; }
+
+        //Hierin bevinden zich de punten van de driver
+        public Results Result { get; set; }
+
+        //Hierin bevindt zich de rondetijd van de driver
+        public Laptime laptime { get; set; }
+
+        //De positie waar de driver is geëndigd
+        public int Podium { get; set; }
         public IEquipment Equipment { get; set; }
         public TeamColors TeamColor { get; set; }
 
@@ -22,6 +32,8 @@ namespace Model
             this.Name = name;
             this.Lap = 0;
             Equipment = new Car(0, 0, 0, false);
+            Result = new Results();
+            laptime = new Laptime();
         }
     }
 }

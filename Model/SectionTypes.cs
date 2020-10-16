@@ -13,8 +13,6 @@ namespace Model
         SuperRightCorner,
         StartGrid,
         Finish,
-        StraightVertical,
-        StartVertical,
-        FinishVertical
+        StraightVertical
     }
 }

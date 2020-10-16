@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -12,12 +13,13 @@ namespace Controller
 {
     public delegate void TimerEvent(object sender, EventArgs eventArgs);
     public delegate void DriverEvent(object sender, DriversChangedEventArgs eventArgs);
+    public delegate Dictionary<string, int> RaceFinishedEvent(Dictionary<string, int> score);
     public delegate void StartNewRaceEvent();
     public class Race
     {
         public Track Track { get; set; }
         public Track ProperTrack { get; set; }
-        public List<IParticipant> Participants = new List<IParticipant>();
+        public List<Driver> Participants = new List<Driver>();
         public DateTime StartTime { get; set; }
 
         private Random _random;
@@ -34,10 +36,17 @@ namespace Controller
 
         private int baanTeller = 1;
         public bool raceStoppen = false;
-        
+
+        private int place = 0;
+        private Stopwatch time = new Stopwatch();
 
         private DriversChangedEventArgs driversChangedEventArgs = new DriversChangedEventArgs();
+        private List<Driver> eindstand = new List<Driver>();
+        public Queue<Driver> driverInOrder = new Queue<Driver>();
+        public bool KondigAan = false;
 
+        public List<int> TestList = new List<int>();
+        
         public Race(Track t, List<IParticipant> IP)
         {
             Data.CurrentRace = this;
@@ -96,6 +105,7 @@ namespace Controller
             timer.Elapsed += OnTimedEvent;
             timer.AutoReset = true;
             timer.Enabled = true;
+            Stopwatch.StartNew();
         }
 
 
@@ -135,7 +145,7 @@ namespace Controller
             }
             foreach (Section sect in track.Sections)
             {
-                if (sect.SectionType == SectionTypes.StartGrid || sect.SectionType == SectionTypes.StartVertical)
+                if (sect.SectionType == SectionTypes.StartGrid)
                 {
                     _positions.Add(sect, sectionData);
                 }
@@ -149,7 +159,7 @@ namespace Controller
         
         public void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
-            foreach(IParticipant participant in Participants)
+            foreach(Driver participant in Participants)
             {
                 Random random = new Random();
                 int broken = random.Next(1, 13);
@@ -164,10 +174,10 @@ namespace Controller
                 }
             }
 
-            MoveCurrentSection();
-            baanTeller = 0;
 
-            Driverschanged(sender, driversChangedEventArgs);
+            MoveCurrentSection();
+
+            baanTeller = 0;
 
             //Kijkt of er nog iemand op de baan is
             foreach (KeyValuePair<Section, SectionData> entry in _positions)
@@ -178,6 +188,14 @@ namespace Controller
                 }
             }
 
+            if(baanTeller == 0)
+            {
+                KondigAan = true;
+            }
+
+
+            Driverschanged(sender, driversChangedEventArgs);
+
             //Als her niemand op de baan is, wordt de timed event stopgezet
             if (baanTeller == 0)
             {
@@ -185,13 +203,21 @@ namespace Controller
                 {
                     Driverschanged = delegate { };
                     timer.Enabled = false;
+                    Data.competition.givePoints(getEindstand());
+                    Data.SetScores();
+
                     Console.WriteLine("Race is klaar");
                 }
                 else
                 {
                     Driverschanged = delegate { };
                     timer.Enabled = false;
+                    time.Stop();
                     Console.Clear();
+
+                    Data.competition.givePoints(getEindstand());
+                    Data.SetScores();
+
                     Data.Initialize();
                     Data.NextRace();
                     Data.CurrentRace.raceStoppen = true;
@@ -202,6 +228,14 @@ namespace Controller
 
         }
 
+        public List<Driver> getEindstand()
+        {
+            foreach(Driver participant in Data.CurrentRace.Participants)
+            {                
+                eindstand.Add(participant);
+            }
+            return eindstand;
+        }
 
         public void MoveCurrentSection()
         {
@@ -272,9 +306,31 @@ namespace Controller
 
                 }
 
-                else if(participant.Lap >= 2)
+                else if(participant.Lap == 2 && participant.Podium == 0)
                 {
+                    place += 1;
+                    if (place == 1)
+                    {
+                        participant.Podium = place;
+                    }
+                    if (place == 2)
+                    {
+                        participant.Podium = place;
+                    }
+                    if (place == 3)
+                    {
+                        participant.Podium = place;
+                    }
+                    else
+                    {
+                        participant.Podium = place;
+                    }
+                    time.Stop();
+                    participant.laptime.Time = time.Elapsed;
+                    time.Start();
 
+                    participant.laptime.Name = participant.Name;
+                    driverInOrder.Enqueue(participant);
                 }
             }
 

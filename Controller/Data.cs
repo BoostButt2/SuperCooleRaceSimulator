@@ -8,14 +8,35 @@ namespace Controller
 {
     public static class Data
     {
-        public static Competition competition { get; set; }
+        public static Competition competition { get; set; } = new Competition();
         public static Race CurrentRace { get; set; }
+       public static  DriverPoints driverpoints { get; set; } = new DriverPoints();
+        public static Laptimes DriverLapTime { get; set; } = new Laptimes();
+        public static DriverPlaces DriversInOrder { get; set; } = new DriverPlaces();
 
         public static void Initialize()
         {
-            competition = new Competition();
             AddParticipant();
             addTrack();
+        }
+
+        public static void SetScores()
+        {
+            foreach (Driver participant in CurrentRace.Participants)
+            {
+                Dictionary<string, int> points = new Dictionary<string, int>();
+                points.Add(participant.Result.Name, participant.Result.Points);
+
+                Dictionary<string, TimeSpan> time = new Dictionary<string, TimeSpan>();
+                time.Add(participant.laptime.Name, participant.laptime.Time);
+
+                Dictionary<string, int> position = new Dictionary<string, int>();
+                position.Add(participant.Name, participant.Podium);
+
+                driverpoints.AddList(points);
+                DriverLapTime.AddList(time);
+                DriversInOrder.AddList(position);
+            }
         }
 
         public static void AddParticipant()
@@ -28,6 +49,9 @@ namespace Controller
 
             Driver flutin = new Driver("Flutin");
             competition.Participants.Add(flutin);
+
+            Driver rasputin = new Driver("Rasputin");
+            competition.Participants.Add(rasputin);
 
         }
 
