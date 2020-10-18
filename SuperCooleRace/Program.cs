@@ -12,7 +12,7 @@ namespace SuperCooleRace
     public delegate string p();
     class Program
     {
-
+        
         private static System.Timers.Timer timer;
         static void Main(string[] args)
         {

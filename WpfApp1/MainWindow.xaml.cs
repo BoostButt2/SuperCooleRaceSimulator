@@ -12,9 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Drawing;
 
-namespace RaceTrackMooi
+namespace WpfApp1
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -22,7 +21,7 @@ namespace RaceTrackMooi
     public partial class MainWindow : Window
     {
         public MainWindow()
-        {            
+        {
             InitializeComponent();
         }
     }
