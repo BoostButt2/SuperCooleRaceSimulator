@@ -6,10 +6,9 @@ namespace Model
 {
     public enum TeamColors
     {
-        Red,
-        Green,
-        Yellow,
-        Grey,
+        Pink,
+        Lime,
+        Orange,
         Blue
     }
     public interface IParticipant
