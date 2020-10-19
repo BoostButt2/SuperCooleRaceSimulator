@@ -11,7 +11,7 @@ namespace RaceTrackMooi
         public static Dictionary<string, Bitmap> Images = new Dictionary<string, Bitmap>();
         public static Bitmap GetImages(string imageURL)
         {
-            
+
         }
     }
 }
