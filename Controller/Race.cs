@@ -32,6 +32,8 @@ namespace Controller
         public int currentSection { get; set; }
 
         public event DriverEvent Driverschanged;
+
+        //Zorgt ervoor dat er een tweede race wordt aangeroepen als de huidige race voorbij is
         public event StartNewRaceEvent NewRaceEvent;
 
         private int baanTeller = 1;

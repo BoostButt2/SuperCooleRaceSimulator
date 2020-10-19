@@ -13,6 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Drawing;
+using Controller;
+using Model;
+using RaceTrackMooi;
 
 namespace RaceTrackMooi
 {
@@ -24,6 +27,34 @@ namespace RaceTrackMooi
         public MainWindow()
         {            
             InitializeComponent();
+            SectionTypes[] properSections = { SectionTypes.StartGrid, SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.StraightVertical, SectionTypes.LeftCorner, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.SuperRightCorner, SectionTypes.StraightVertical, SectionTypes.SuperLeftCorner, SectionTypes.Finish };
+            Track properTrack = new Track("Proper racetrack", properSections);
+
+            Driver dimitri = new Driver("Dimitri");
+            Driver totoro = new Driver("Totoro");
+            Driver megumin = new Driver("Megumin");
+
+            List<IParticipant> drivers = new List<IParticipant>();
+            drivers.Add(dimitri);
+            drivers.Add(totoro);
+            drivers.Add(megumin);
+            Race properRace = new Race(properTrack, drivers);
+            StartRace();
+
+        }
+
+        public static void StartRace()
+        {
+            DriversChangedEventArgs driversChangedEventArgs = new DriversChangedEventArgs();
+            driversChangedEventArgs.track = Data.CurrentRace.Track;
+
+            Data.CurrentRace.Driverschanged += OnDriversChanged;
+            Data.CurrentRace.NewRaceEvent += StartRace;
+        }
+
+        public static void OnDriversChanged(object sender, DriversChangedEventArgs e)
+        {
+            VisualisationMooi.DrawTrack(Data.CurrentRace.Track);
         }
     }
 }
