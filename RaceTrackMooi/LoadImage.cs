@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Media;
 using System.Drawing;
+using System.Windows.Media.Imaging;
+using System.Drawing.Imaging;
 
 namespace RaceTrackMooi
 {
@@ -11,7 +13,72 @@ namespace RaceTrackMooi
         public static Dictionary<string, Bitmap> Images = new Dictionary<string, Bitmap>();
         public static Bitmap GetImages(string imageURL)
         {
+            try
+            {
+                return Images[imageURL];
+            }
+            catch(Exception e)
+            {
+                Bitmap newImage = new Bitmap(imageURL);
+                Images.Add(imageURL, newImage);
+                return Images[imageURL];
+            }
+        }
 
+        public static void ClearCache()
+        {
+            Images.Clear();
+        }
+
+        public static Bitmap GetEmptyImage(int x, int y)
+        {
+
+            if (!Images.ContainsKey("empty"))
+            {
+                Bitmap bm = new Bitmap(x, y);
+                Graphics graphic = Graphics.FromImage(bm);
+                SolidBrush solidGray = new SolidBrush(System.Drawing.Color.LightGray);
+                graphic.FillRectangle(solidGray, 0, 0, x, y);
+
+                Bitmap goodBitmap = new Bitmap(x, y, graphic);
+
+                Images.Add("empty", goodBitmap);
+                return (Bitmap) Images["empty"].Clone();
+            }
+            else
+            {
+                return (Bitmap) Images["empty"].Clone();
+            }
+           
+        }
+
+        public static BitmapSource CreateBitmapSourceFromGdiBitmap(Bitmap bitmap)
+        {
+            if (bitmap == null)
+                throw new ArgumentNullException("bitmap");
+            var rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+            var bitmapData = bitmap.LockBits(
+            rect,
+            ImageLockMode.ReadWrite,
+            System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            try
+            {
+                var size = (rect.Width * rect.Height) * 4;
+                return BitmapSource.Create(
+                bitmap.Width,
+                bitmap.Height,
+                bitmap.HorizontalResolution,
+                bitmap.VerticalResolution,
+                PixelFormats.Bgra32,
+                null,
+                bitmapData.Scan0,
+                size,
+                bitmapData.Stride);
+            }
+            finally
+            {
+                bitmap.UnlockBits(bitmapData);
+            }
         }
     }
 }
