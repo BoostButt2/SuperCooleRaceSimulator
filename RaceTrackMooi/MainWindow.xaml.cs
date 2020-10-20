@@ -16,6 +16,7 @@ using System.Drawing;
 using Controller;
 using Model;
 using RaceTrackMooi;
+using System.Windows.Threading;
 
 namespace RaceTrackMooi
 {
@@ -25,7 +26,7 @@ namespace RaceTrackMooi
     public partial class MainWindow : Window
     {
         public MainWindow()
-        {            
+        {
             InitializeComponent();
             SectionTypes[] properSections = { SectionTypes.StartGrid, SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.StraightVertical, SectionTypes.LeftCorner, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.SuperRightCorner, SectionTypes.StraightVertical, SectionTypes.SuperLeftCorner, SectionTypes.Finish };
             Track properTrack = new Track("Proper racetrack", properSections);
@@ -39,7 +40,15 @@ namespace RaceTrackMooi
             drivers.Add(totoro);
             drivers.Add(megumin);
             Race properRace = new Race(properTrack, drivers);
-            StartRace();
+            //StartRace();
+
+            this.StartGrid1.Dispatcher.BeginInvoke(
+            DispatcherPriority.Render,
+            new Action(() =>
+            {
+                this.StartGrid1.Source = null;
+                this.StartGrid1.Source = VisualisationMooi.DrawTrack(properTrack);
+            }));
 
         }
 
@@ -50,11 +59,14 @@ namespace RaceTrackMooi
 
             Data.CurrentRace.Driverschanged += OnDriversChanged;
             Data.CurrentRace.NewRaceEvent += StartRace;
+
+
         }
 
         public static void OnDriversChanged(object sender, DriversChangedEventArgs e)
         {
             VisualisationMooi.DrawTrack(Data.CurrentRace.Track);
+            Data.CurrentRace.Driverschanged += OnDriversChanged;
         }
     }
 }

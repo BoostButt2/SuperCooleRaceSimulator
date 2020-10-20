@@ -14,5 +14,6 @@ namespace RaceTrackMooi
         {           
             return LoadImage.CreateBitmapSourceFromGdiBitmap(LoadImage.GetEmptyImage(100, 100));
         }
+        
     }
 }

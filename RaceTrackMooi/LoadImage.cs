@@ -30,6 +30,7 @@ namespace RaceTrackMooi
             Images.Clear();
         }
 
+        //Maakt een lege Bitmap aan
         public static Bitmap GetEmptyImage(int x, int y)
         {
 
@@ -52,6 +53,7 @@ namespace RaceTrackMooi
            
         }
 
+        //zet een Bitmap om naar een BitmapSource
         public static BitmapSource CreateBitmapSourceFromGdiBitmap(Bitmap bitmap)
         {
             if (bitmap == null)
