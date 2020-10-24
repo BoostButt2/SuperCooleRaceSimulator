@@ -31,19 +31,17 @@ namespace RaceTrackMooi
         }
 
         //Maakt een lege Bitmap aan
-        public static Bitmap GetEmptyImage(int x, int y)
+        public static Bitmap GetEmptyImage(int width, int height)
         {
 
             if (!Images.ContainsKey("empty"))
             {
-                Bitmap bm = new Bitmap(x, y);
+                Bitmap bm = new Bitmap(width, height);
                 Graphics graphic = Graphics.FromImage(bm);
-                SolidBrush solidGray = new SolidBrush(System.Drawing.Color.LightGray);
-                graphic.FillRectangle(solidGray, 0, 0, x, y);
+                SolidBrush solidGray = new SolidBrush(System.Drawing.Color.FromArgb(128, 128, 128));
+                graphic.FillRectangle(solidGray, 0, 0, width, height);
 
-                Bitmap goodBitmap = new Bitmap(x, y, graphic);
-
-                Images.Add("empty", goodBitmap);
+                Images.Add("empty", bm);
                 return (Bitmap) Images["empty"].Clone();
             }
             else

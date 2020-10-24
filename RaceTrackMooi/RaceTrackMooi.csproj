@@ -7,18 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="SectionTypes\Blue.png" />
-    <None Remove="SectionTypes\Finish.png" />
-    <None Remove="SectionTypes\LeftCorner.jpg" />
-    <None Remove="SectionTypes\Lime.png" />
-    <None Remove="SectionTypes\Orange.png" />
-    <None Remove="SectionTypes\Pink.png" />
-    <None Remove="SectionTypes\RightCorner.png" />
-    <None Remove="SectionTypes\StartGrid.png" />
-    <None Remove="SectionTypes\Straight_Horizontal.png" />
-    <None Remove="SectionTypes\Straight_Vertical.jpg" />
-    <None Remove="SectionTypes\SuperLeftCorner.jpg" />
-    <None Remove="SectionTypes\SuperRightCOrner.jpg" />
+    <None Remove="TrackVisual\Blue.png" />
+    <None Remove="TrackVisual\Finish.png" />
+    <None Remove="TrackVisual\LeftCorner.jpg" />
+    <None Remove="TrackVisual\Lime.png" />
+    <None Remove="TrackVisual\Orange.png" />
+    <None Remove="TrackVisual\Pink.png" />
+    <None Remove="TrackVisual\RightCorner.png" />
+    <None Remove="TrackVisual\StartGrid.png" />
+    <None Remove="TrackVisual\Straight_Horizontal.png" />
+    <None Remove="TrackVisual\Straight_Vertical.jpg" />
+    <None Remove="TrackVisual\SuperLeftCorner.jpg" />
+    <None Remove="TrackVisual\SuperRightCOrner.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,18 +31,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="SectionTypes\Blue.png" />
-    <Content Include="SectionTypes\Finish.png" />
-    <Content Include="SectionTypes\LeftCorner.jpg" />
-    <Content Include="SectionTypes\Lime.png" />
-    <Content Include="SectionTypes\Orange.png" />
-    <Content Include="SectionTypes\Pink.png" />
-    <Content Include="SectionTypes\RightCorner.png" />
-    <Content Include="SectionTypes\StartGrid.png" />
-    <Content Include="SectionTypes\Straight_Horizontal.png" />
-    <Content Include="SectionTypes\Straight_Vertical.jpg" />
-    <Content Include="SectionTypes\SuperLeftCorner.jpg" />
-    <Content Include="SectionTypes\SuperRightCOrner.jpg" />
+    <Content Include="TrackVisual\Blue.png" />
+    <Content Include="TrackVisual\Finish.png" />
+    <Content Include="TrackVisual\LeftCorner.jpg" />
+    <Content Include="TrackVisual\Lime.png" />
+    <Content Include="TrackVisual\Orange.png" />
+    <Content Include="TrackVisual\Pink.png" />
+    <Content Include="TrackVisual\RightCorner.png" />
+    <Content Include="TrackVisual\StartGrid.png" />
+    <Content Include="TrackVisual\Straight_Horizontal.png" />
+    <Content Include="TrackVisual\Straight_Vertical.jpg" />
+    <Content Include="TrackVisual\SuperLeftCorner.jpg" />
+    <Content Include="TrackVisual\SuperRightCOrner.jpg" />
   </ItemGroup>
 
   <ItemGroup>
