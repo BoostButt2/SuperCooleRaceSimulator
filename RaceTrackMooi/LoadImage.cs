@@ -5,6 +5,7 @@ using System.Windows.Media;
 using System.Drawing;
 using System.Windows.Media.Imaging;
 using System.Drawing.Imaging;
+using System.Windows;
 
 namespace RaceTrackMooi
 {

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid Background="DarkGreen">
-        <Image Height="100" Width="100" Stretch="Fill" Name="StartGrid1"/>
+        <Image Stretch="Fill" Name="StartGrid1"/>
 
 
     </Grid>
