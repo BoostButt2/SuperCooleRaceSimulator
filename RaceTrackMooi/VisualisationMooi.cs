@@ -12,6 +12,11 @@ namespace RaceTrackMooi
 {
     public static class VisualisationMooi
     {
+        //Bewaart de x en y coördinaten
+        private static int x;
+        private static int y;
+
+
         public static BitmapSource DrawTrack(Track track)
         {
             Section[] sections = track.Sections.ToArray();
