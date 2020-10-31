@@ -21,11 +21,39 @@ namespace RaceTrackMooi
         {
             Section[] sections = track.Sections.ToArray();
 
+            //maakt de bitmap aan waar alle tracksections op getekend moeten worden
+            Bitmap map = LoadImage.GetEmptyImage(1920, 1080);
+
+            //Zorgt ervoor dat er getekend kan worden op de map
+            Graphics g = Graphics.FromImage(map);
+            g.CompositingMode = CompositingMode.SourceOver;
+
+            int right = 0;
+            int superRight = 0;
+            int left = 0;
+
+            int subX1 = 15;
+            int subY1 = 5;
+
+            int subX2 = 15;
+            int subY2 = 30;
+
+            int startGridTeller = 0;
+
             foreach (Section section in sections)
             {
                 if (section.SectionType == SectionTypes.StartGrid)
                 {
                     LoadImage.GetImages(StartGrid);
+                    if(startGridTeller == 0)
+                    {
+                        x = 600;
+                        y = 0;
+
+                        //Zet de tracksection op de map met als parameters de tracksection, plek op x as, plek op y as
+                        g.DrawImage(LoadImage.Images[StartGrid], x, y);
+                        x += 100;
+                    }
                 }
 
                 if (section.SectionType == SectionTypes.Finish)
@@ -63,18 +91,6 @@ namespace RaceTrackMooi
                     LoadImage.GetImages(SuperLeftCorner);
                 }
             }
-            //maakt de bitmap aan waar alle tracksections op getekend moeten worden
-            Bitmap map = LoadImage.GetEmptyImage(1000, 1000);
-
-            //Maakt de tracksection aan die getekend wordt op de map
-            Bitmap start = LoadImage.Images[StartGrid];
-
-            //Zorgt ervoor dat er getekend kan worden op de map
-            Graphics g = Graphics.FromImage(map);
-            g.CompositingMode = CompositingMode.SourceOver;
-
-            //Zet de tracksection op de map met als parameters de tracksection, plek op x as, plek op y as
-            g.DrawImage(start, 1, 1);
 
             return LoadImage.CreateBitmapSourceFromGdiBitmap(map);
         }
