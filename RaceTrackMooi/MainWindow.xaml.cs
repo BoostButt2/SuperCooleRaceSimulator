@@ -37,6 +37,11 @@ namespace RaceTrackMooi
             Driver totoro = new Driver("Totoro");
             Driver megumin = new Driver("Megumin");
 
+            dimitri.TeamColor = TeamColors.Lime;
+            totoro.TeamColor = TeamColors.Orange;
+            megumin.TeamColor = TeamColors.Pink;
+
+
             List<IParticipant> drivers = new List<IParticipant>();
             drivers.Add(dimitri);
             drivers.Add(totoro);

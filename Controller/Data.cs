@@ -42,15 +42,19 @@ namespace Controller
         public static void AddParticipant()
         {
             Driver putin = new Driver("Putin");
+            putin.TeamColor = TeamColors.Pink;
             competition.Participants.Add(putin);
 
             Driver snutin = new Driver("Snutin");
+            snutin.TeamColor = TeamColors.Orange;
             competition.Participants.Add(snutin);
 
             Driver flutin = new Driver("Flutin");
+            flutin.TeamColor = TeamColors.Blue;
             competition.Participants.Add(flutin);
 
             Driver rasputin = new Driver("Rasputin");
+            rasputin.TeamColor = TeamColors.Lime;
             competition.Participants.Add(rasputin);
 
         }

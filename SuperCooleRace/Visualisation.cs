@@ -45,7 +45,6 @@ namespace SuperCooleRace
 
             Section[] hulpArray = track.Sections.ToArray();
 
-            Section[] p = track.Sections.ToArray();
             for (int i = 0; i < track.Sections.Count; i++)
             {
                 if (hulpArray[i].SectionType == SectionTypes.StartGrid)
