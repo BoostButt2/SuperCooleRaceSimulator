@@ -243,39 +243,46 @@ namespace RaceTrackMooi
                         x += 100;
                     }
 
-
-                    if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                    try
                     {
-                        g.DrawImage(PlaatsBeide(LoadImage.Images[StartGrid]), x, y);
-
-                    }
-
-                    else if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right == null)
-                    {
-
-                        if (i == 0)
+                        if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
                         {
-                            x = 600;
-                            y = 0;
-                        }
-                        g.DrawImage(PlaatsLinks(LoadImage.Images[StartGrid]), x, y);
+                            g.DrawImage(PlaatsBeide(LoadImage.Images[StartGrid]), x, y);
 
-                    }
-                    else if (Data.CurrentRace._positions[hulpArray[i]].Left == null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
-                    {
-
-                        if (i == 0)
-                        {
-                            x = 600;
-                            y = 0;
                         }
 
-                        g.DrawImage(PlaatsRechts(LoadImage.Images[StartGrid]), x, y);
+                        else if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right == null)
+                        {
+
+                            if (i == 0)
+                            {
+                                x = 600;
+                                y = 0;
+                            }
+                            g.DrawImage(PlaatsLinks(LoadImage.Images[StartGrid]), x, y);
+
+                        }
+                        else if (Data.CurrentRace._positions[hulpArray[i]].Left == null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                        {
+
+                            if (i == 0)
+                            {
+                                x = 600;
+                                y = 0;
+                            }
+
+                            g.DrawImage(PlaatsRechts(LoadImage.Images[StartGrid]), x, y);
+                        }
+                        else
+                        {
+                            //Zet de tracksection op de map met als parameters de tracksection, plek op x as, plek op y as
+                            g.DrawImage(LoadImage.Images[StartGrid], x, y);
+                        }
                     }
-                    else
+
+                    catch (Exception e)
                     {
-                        //Zet de tracksection op de map met als parameters de tracksection, plek op x as, plek op y as
-                        g.DrawImage(LoadImage.Images[StartGrid], x, y);
+
                     }
                 }
 
@@ -283,23 +290,32 @@ namespace RaceTrackMooi
                 {
                     x += 100;
 
-                    if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                    try
                     {
-                        g.DrawImage(PlaatsBeide(LoadImage.Images[Finish]), x, y);
+
+                        if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                        {
+                            g.DrawImage(PlaatsBeide(LoadImage.Images[Finish]), x, y);
+                        }
+
+                        else if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right == null)
+                        {
+                            g.DrawImage(PlaatsLinks(LoadImage.Images[Finish]), x, y);
+                        }
+
+                        else if (Data.CurrentRace._positions[hulpArray[i]].Left == null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                        {
+                            g.DrawImage(PlaatsRechts(LoadImage.Images[Finish]), x, y);
+                        }
+                        else
+                        {
+                            g.DrawImage(LoadImage.Images[Finish], x, y);
+                        }
                     }
 
-                    else if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right == null)
+                    catch (Exception e)
                     {
-                        g.DrawImage(PlaatsLinks(LoadImage.Images[Finish]), x, y);
-                    }
 
-                    else if (Data.CurrentRace._positions[hulpArray[i]].Left == null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
-                    {
-                        g.DrawImage(PlaatsRechts(LoadImage.Images[Finish]), x, y);
-                    }
-                    else
-                    {
-                        g.DrawImage(LoadImage.Images[Finish], x, y);
                     }
 
                 }
@@ -319,24 +335,30 @@ namespace RaceTrackMooi
                         x += 100;
                     }
 
+                    try
+                    {
+                        if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                        {
+                            g.DrawImage(PlaatsBeide(LoadImage.Images[RightCorner]), x, y);
+                        }
 
-                    if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
-                    {
-                        g.DrawImage(PlaatsBeide(LoadImage.Images[RightCorner]), x, y);
-                    }
+                        else if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right == null)
+                        {
+                            g.DrawImage(PlaatsLinks(LoadImage.Images[RightCorner]), x, y);
+                        }
 
-                    else if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right == null)
-                    {
-                        g.DrawImage(PlaatsLinks(LoadImage.Images[RightCorner]), x, y);
+                        else if (Data.CurrentRace._positions[hulpArray[i]].Left == null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                        {
+                            g.DrawImage(PlaatsRechts(LoadImage.Images[RightCorner]), x, y);
+                        }
+                        else
+                        {
+                            g.DrawImage(LoadImage.Images[RightCorner], x, y);
+                        }
                     }
+                    catch (Exception e)
+                    {
 
-                    else if (Data.CurrentRace._positions[hulpArray[i]].Left == null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
-                    {
-                        g.DrawImage(PlaatsRechts(LoadImage.Images[RightCorner]), x, y);
-                    }
-                    else
-                    {
-                        g.DrawImage(LoadImage.Images[RightCorner], x, y);
                     }
 
                 }
@@ -353,26 +375,32 @@ namespace RaceTrackMooi
                     {
                         x -= 100;
                     }
-
-                    if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                    try
                     {
-                        g.DrawImage(PlaatsBeide(LoadImage.Images[SuperRightCorner]), x, y);
-                    }
 
-                    else if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right == null)
-                    {
-                        g.DrawImage(PlaatsLinks(LoadImage.Images[SuperRightCorner]), x, y);
-                    }
+                        if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                        {
+                            g.DrawImage(PlaatsBeide(LoadImage.Images[SuperRightCorner]), x, y);
+                        }
 
-                    else if (Data.CurrentRace._positions[hulpArray[i]].Left == null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
-                    {
-                        g.DrawImage(PlaatsRechts(LoadImage.Images[SuperRightCorner]), x, y);
-                    }
-                    else
-                    {
-                        g.DrawImage(LoadImage.Images[SuperRightCorner], x, y);
-                    }
+                        else if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right == null)
+                        {
+                            g.DrawImage(PlaatsLinks(LoadImage.Images[SuperRightCorner]), x, y);
+                        }
 
+                        else if (Data.CurrentRace._positions[hulpArray[i]].Left == null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                        {
+                            g.DrawImage(PlaatsRechts(LoadImage.Images[SuperRightCorner]), x, y);
+                        }
+                        else
+                        {
+                            g.DrawImage(LoadImage.Images[SuperRightCorner], x, y);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
                 }
 
                 if (hulpArray[i].SectionType == SectionTypes.LeftCorner)
@@ -390,25 +418,33 @@ namespace RaceTrackMooi
                         y += 100;
                     }
 
-                    if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                    try
                     {
-                        g.DrawImage(PlaatsBeide(LoadImage.Images[LeftCorner]), x, y);
+
+                        if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                        {
+                            g.DrawImage(PlaatsBeide(LoadImage.Images[LeftCorner]), x, y);
+                        }
+
+                        else if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right == null)
+                        {
+                            g.DrawImage(PlaatsLinks(LoadImage.Images[LeftCorner]), x, y);
+                        }
+
+                        else if (Data.CurrentRace._positions[hulpArray[i]].Left == null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                        {
+                            g.DrawImage(PlaatsRechts(LoadImage.Images[LeftCorner]), x, y);
+                        }
+                        else
+                        {
+                            g.DrawImage(LoadImage.Images[LeftCorner], x, y);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+
                     }
 
-                    else if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right == null)
-                    {
-                        g.DrawImage(PlaatsLinks(LoadImage.Images[LeftCorner]), x, y);
-                    }
-
-                    else if (Data.CurrentRace._positions[hulpArray[i]].Left == null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
-                    {
-                        g.DrawImage(PlaatsRechts(LoadImage.Images[LeftCorner]), x, y);
-                    }
-                    else
-                    {
-                        g.DrawImage(LoadImage.Images[LeftCorner], x, y);
-                    }
-  
                 }
                 if (hulpArray[i].SectionType == SectionTypes.SuperLeftCorner)
                 {
@@ -423,23 +459,31 @@ namespace RaceTrackMooi
                         x -= 100;
                     }
 
-                    if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                    try
                     {
-                        g.DrawImage(PlaatsBeide(LoadImage.Images[SuperLeftCorner]), x, y);
-                    }
 
-                    else if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right == null)
-                    {
-                        g.DrawImage(PlaatsLinks(LoadImage.Images[SuperLeftCorner]), x, y);
-                    }
+                        if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                        {
+                            g.DrawImage(PlaatsBeide(LoadImage.Images[SuperLeftCorner]), x, y);
+                        }
 
-                    else if (Data.CurrentRace._positions[hulpArray[i]].Left == null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
-                    {
-                        g.DrawImage(PlaatsRechts(LoadImage.Images[SuperLeftCorner]), x, y);
+                        else if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right == null)
+                        {
+                            g.DrawImage(PlaatsLinks(LoadImage.Images[SuperLeftCorner]), x, y);
+                        }
+
+                        else if (Data.CurrentRace._positions[hulpArray[i]].Left == null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                        {
+                            g.DrawImage(PlaatsRechts(LoadImage.Images[SuperLeftCorner]), x, y);
+                        }
+                        else
+                        {
+                            g.DrawImage(LoadImage.Images[SuperLeftCorner], x, y);
+                        }
                     }
-                    else
+                    catch (Exception e)
                     {
-                        g.DrawImage(LoadImage.Images[SuperLeftCorner], x, y);
+
                     }
 
                 }
@@ -455,24 +499,31 @@ namespace RaceTrackMooi
                         x -= 100;
                     }
 
+                    try
+                    {
 
-                    if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
-                    {
-                        g.DrawImage(PlaatsBeide(LoadImage.Images[StraightHorizontal]), x, y);
-                    }
+                        if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                        {
+                            g.DrawImage(PlaatsBeide(LoadImage.Images[StraightHorizontal]), x, y);
+                        }
 
-                    else if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right == null)
-                    {
-                        g.DrawImage(PlaatsLinks(LoadImage.Images[StraightHorizontal]), x, y);
-                    }
+                        else if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right == null)
+                        {
+                            g.DrawImage(PlaatsLinks(LoadImage.Images[StraightHorizontal]), x, y);
+                        }
 
-                    else if (Data.CurrentRace._positions[hulpArray[i]].Left == null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
-                    {
-                        g.DrawImage(PlaatsRechts(LoadImage.Images[StraightHorizontal]), x, y);
+                        else if (Data.CurrentRace._positions[hulpArray[i]].Left == null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                        {
+                            g.DrawImage(PlaatsRechts(LoadImage.Images[StraightHorizontal]), x, y);
+                        }
+                        else
+                        {
+                            g.DrawImage(LoadImage.Images[StraightHorizontal], x, y);
+                        }
                     }
-                    else
+                    catch (Exception e)
                     {
-                        g.DrawImage(LoadImage.Images[StraightHorizontal], x, y);
+
                     }
 
                 }
@@ -488,24 +539,31 @@ namespace RaceTrackMooi
                         y += 100;
                     }
 
+                    try
+                    {
 
-                    if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
-                    {
-                        g.DrawImage(PlaatsBeide(LoadImage.Images[StraightVertical]), x, y);
-                    }
+                        if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                        {
+                            g.DrawImage(PlaatsBeide(LoadImage.Images[StraightVertical]), x, y);
+                        }
 
-                    else if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right == null)
-                    {
-                        g.DrawImage(PlaatsLinks(LoadImage.Images[StraightVertical]), x, y);
-                    }
+                        else if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right == null)
+                        {
+                            g.DrawImage(PlaatsLinks(LoadImage.Images[StraightVertical]), x, y);
+                        }
 
-                    else if (Data.CurrentRace._positions[hulpArray[i]].Left == null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
-                    {
-                        g.DrawImage(PlaatsRechts(LoadImage.Images[StraightVertical]), x, y);
+                        else if (Data.CurrentRace._positions[hulpArray[i]].Left == null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
+                        {
+                            g.DrawImage(PlaatsRechts(LoadImage.Images[StraightVertical]), x, y);
+                        }
+                        else
+                        {
+                            g.DrawImage(LoadImage.Images[StraightVertical], x, y);
+                        }
                     }
-                    else
+                    catch (Exception e)
                     {
-                        g.DrawImage(LoadImage.Images[StraightVertical], x, y);
+
                     }
 
                 }
