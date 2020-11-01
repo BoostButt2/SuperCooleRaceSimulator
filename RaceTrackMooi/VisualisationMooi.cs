@@ -88,7 +88,6 @@ namespace RaceTrackMooi
             int right = 0;
             int superRight = 0;
             int left = 0;
-            int superleft = 0;
 
             int linksX = 30;
             int linksY = 20;
@@ -100,6 +99,10 @@ namespace RaceTrackMooi
             #region
             for (int i = 0; i < track.Sections.Count; i++)
             {
+                if (Data.CurrentRace.KondigAan)
+                {
+
+                }
                 Bitmap PlaatsLinks(Bitmap bm)
                 {
                     //Linkerhelft

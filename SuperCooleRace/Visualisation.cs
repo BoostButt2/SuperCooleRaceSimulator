@@ -44,7 +44,7 @@ namespace SuperCooleRace
             noDriverRechts = new Driver(">");
 
             Section[] hulpArray = track.Sections.ToArray();
-
+            #region
             for (int i = 0; i < track.Sections.Count; i++)
             {
                 if (hulpArray[i].SectionType == SectionTypes.StartGrid)
@@ -436,6 +436,7 @@ namespace SuperCooleRace
                     }
                 }
             }
+            #endregion
             if (Data.CurrentRace.KondigAan)
             {
                 Console.WriteLine($"De eerste plek is behaald door {Data.DriversInOrder.GetBestDriver()}");

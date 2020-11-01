@@ -48,27 +48,22 @@ namespace RaceTrackMooi
             drivers.Add(megumin);
             Race properRace = new Race(properTrack, drivers);
 
-            Data.CurrentRace.Driverschanged += AnEventHandler;
-
-
-
-            //StartRace();
+            StartRace();
 
         }
 
-        //public static void StartRace()
-        //{
-        //    DriversChangedEventArgs driversChangedEventArgs = new DriversChangedEventArgs();
-        //    driversChangedEventArgs.track = Data.CurrentRace.Track;
+        public void StartRace()
+        {
+            DriversChangedEventArgs driversChangedEventArgs = new DriversChangedEventArgs();
+            driversChangedEventArgs.track = Data.CurrentRace.Track;
 
-        //    Data.CurrentRace.Driverschanged += OnDriversChanged;
-        //    Data.CurrentRace.NewRaceEvent += StartRace;
-        //}
+            AnEventHandler(this, driversChangedEventArgs);
+            Data.CurrentRace.Driverschanged += AnEventHandler;
 
-        //public static void OnDriversChanged(object sender, DriversChangedEventArgs e)
-        //{
-        //    VisualisationMooi.DrawTrack(Data.CurrentRace.Track);
-        //}
+            LoadImage.ClearCache();
+            Data.CurrentRace.NewRaceEvent += StartRace;
+        }
+
         public void AnEventHandler(object sender, EventArgs e)
         {
                        this.StartGrid1.Dispatcher.BeginInvoke(
@@ -76,7 +71,7 @@ namespace RaceTrackMooi
             new Action(() =>
             {
                 this.StartGrid1.Source = null;
-                this.StartGrid1.Source = VisualisationMooi.DrawTrack(properTrack);
+                this.StartGrid1.Source = VisualisationMooi.DrawTrack(Data.CurrentRace.Track);
             }));
         }
     }

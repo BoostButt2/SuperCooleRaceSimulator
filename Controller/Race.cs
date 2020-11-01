@@ -18,7 +18,6 @@ namespace Controller
     public class Race
     {
         public Track Track { get; set; }
-        public Track ProperTrack { get; set; }
         public List<Driver> Participants = new List<Driver>();
         public DateTime StartTime { get; set; }
 
@@ -28,8 +27,6 @@ namespace Controller
         public SectionData sectionData = new SectionData();
 
         private System.Timers.Timer timer;
-
-        public int currentSection { get; set; }
 
         public event DriverEvent Driverschanged;
 
@@ -207,15 +204,12 @@ namespace Controller
                     timer.Enabled = false;
                     Data.competition.givePoints(getEindstand());
                     Data.SetScores();
-
-                    Console.WriteLine("Race is klaar");
                 }
                 else
                 {
                     Driverschanged = delegate { };
                     timer.Enabled = false;
                     time.Stop();
-                    Console.Clear();
 
                     Data.competition.givePoints(getEindstand());
                     Data.SetScores();
