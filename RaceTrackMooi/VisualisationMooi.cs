@@ -307,13 +307,14 @@ namespace RaceTrackMooi
                 if (hulpArray[i].SectionType == SectionTypes.RightCorner)
                 {
                     right = 1;
-                    if (superRight != 0 || left != 0)
+                    superRight = 0;
+                    if (left != 0)
                     {
                         y -= 100;
                         superRight = 0;
                         left = 0;
                     }
-                    if(superRight == 0 && left == 0)
+                    if(left == 0)
                     {
                         x += 100;
                     }
@@ -344,8 +345,14 @@ namespace RaceTrackMooi
                 {
                     superRight = 1;
                     left = 0;
-
-                    x -= 100;
+                    if(right != 0)
+                    {
+                        y += 100;
+                    }
+                    if(right == 0)
+                    {
+                        x -= 100;
+                    }
 
                     if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)
                     {
@@ -376,11 +383,11 @@ namespace RaceTrackMooi
                     if(superRight != 0)
                     {
                         x += 100;
+                        superRight = 0;
                     }
                     if(superRight == 0)
                     {
                         y += 100;
-                        superRight = 0;
                     }
 
                     if (Data.CurrentRace._positions[hulpArray[i]].Left != null && Data.CurrentRace._positions[hulpArray[i]].Right != null)

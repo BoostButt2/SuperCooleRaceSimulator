@@ -73,6 +73,7 @@ namespace RaceTrackMooi
                 this.StartGrid1.Source = null;
                 this.StartGrid1.Source = VisualisationMooi.DrawTrack(Data.CurrentRace.Track);
             }));
+
         }
     }
 }
