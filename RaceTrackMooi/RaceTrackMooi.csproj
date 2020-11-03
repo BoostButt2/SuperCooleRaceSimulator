@@ -9,7 +9,6 @@
   <ItemGroup>
     <None Remove="TrackVisual\Blue.png" />
     <None Remove="TrackVisual\Finish.png" />
-    <None Remove="TrackVisual\LeftCorner.jpg" />
     <None Remove="TrackVisual\Lime.png" />
     <None Remove="TrackVisual\Orange.png" />
     <None Remove="TrackVisual\Pink.png" />
@@ -33,7 +32,6 @@
   <ItemGroup>
     <Content Include="TrackVisual\Blue.png" />
     <Content Include="TrackVisual\Finish.png" />
-    <Content Include="TrackVisual\LeftCorner.jpg" />
     <Content Include="TrackVisual\Lime.png" />
     <Content Include="TrackVisual\Orange.png" />
     <Content Include="TrackVisual\Pink.png" />

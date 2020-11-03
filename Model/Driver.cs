@@ -35,5 +35,10 @@ namespace Model
             Result = new Results();
             laptime = new Laptime();
         }
+
+        public override string ToString()
+        {
+            return $"Racer: {Name}, Team: {TeamColor}";
+        }
     }
 }

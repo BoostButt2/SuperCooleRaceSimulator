@@ -77,7 +77,7 @@ namespace RaceTrackMooi
             #endregion
 
             //maakt de bitmap aan waar alle tracksections op getekend moeten worden
-            Bitmap map = LoadImage.GetEmptyImage(1920, 1080);
+            Bitmap map = LoadImage.GetEmptyImage(1280, 720);
 
             //Zorgt ervoor dat er getekend kan worden op de map
             Graphics g = Graphics.FromImage(map);

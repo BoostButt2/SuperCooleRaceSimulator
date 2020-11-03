@@ -10,23 +10,27 @@
         <local:DataContext/>
     </Window.DataContext>
 
-    <Grid Background="DarkGreen" >
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="103*"/>
-            <ColumnDefinition Width="697*"/>
-        </Grid.ColumnDefinitions>
+    <Grid Background="Gray" >
 
-        <DockPanel Grid.ColumnSpan="2">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="20*"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.ColumnSpan="2" Grid.Row="0">
             <Menu DockPanel.Dock="Top" Height="20" VerticalAlignment="Top" >
-                <MenuItem Background="Transparent" BorderBrush="Transparent" Header="Menu" IsCheckable="True">
+                <MenuItem Background="Transparent" BorderBrush="Transparent" Header="Menu">
                     <MenuItem Header="Race stats" Click="MenuItem_RaceStats_Click"/>
                     <MenuItem Header="Driver stats" Click="MenuItem_DriverStats_Click"/>
                     <MenuItem Header="Close" Click="MenuItem_Exit_Click"/>
                 </MenuItem>
 
             </Menu>
-            <Image Name="EmptyImage" Grid.ColumnSpan="2" VerticalAlignment="Top"/>
         </DockPanel>
+        <Label Name="TrackName" VerticalAlignment="Top" Content="{Binding TrackName}" Grid.Row="1" Grid.ColumnSpan="2"/>
+        <Image Name="EmptyImage" Grid.ColumnSpan="2" VerticalAlignment="Top" Stretch="Fill" Grid.Row="2"/>
 
     </Grid>
 </Window>

@@ -67,11 +67,11 @@ namespace Controller
         public static void addTrack()
         {
             SectionTypes[] properSections = { SectionTypes.StartGrid, SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.StraightVertical, SectionTypes.LeftCorner, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.SuperRightCorner, SectionTypes.StraightVertical, SectionTypes.SuperLeftCorner, SectionTypes.Finish };
-            Track properTrack = new Track("Proper racetrack", properSections);
+            Track properTrack = new Track("Baby Circuit", properSections);
 
             SectionTypes[] sections = { SectionTypes.StartGrid, SectionTypes.StartGrid, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.StraightVertical, SectionTypes.StraightVertical, SectionTypes.SuperRightCorner, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.LeftCorner, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.SuperRightCorner, SectionTypes.StraightVertical, SectionTypes.StraightVertical, SectionTypes.StraightVertical, SectionTypes.SuperLeftCorner, SectionTypes.Finish };
 
-            Track hardTrack = new Track("Hard track", sections);
+            Track hardTrack = new Track("Not really rainbowroad", sections);
 
             competition.Tracks.Enqueue(properTrack);
             competition.Tracks.Enqueue(hardTrack);

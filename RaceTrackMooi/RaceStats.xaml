@@ -6,7 +6,22 @@
         xmlns:local="clr-namespace:RaceTrackMooi"
         mc:Ignorable="d"
         Title="RaceStats" Height="450" Width="800">
-    <Grid>
-        
+    <Window.DataContext>
+        <local:DataContext/>
+    </Window.DataContext>
+
+
+    <Grid Background="DarkGray">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="10*"/>
+        </Grid.RowDefinitions>
+        <Label VerticalAlignment="Top" Content="{Binding TrackName}" Grid.Row= "0"></Label>
+        <ListView Width="250" Height="180" ItemsSource="{Binding Drivers}" Grid.Row="1" VerticalAlignment="Top"></ListView>
     </Grid>
 </Window>

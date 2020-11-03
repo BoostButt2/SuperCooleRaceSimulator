@@ -26,7 +26,7 @@ namespace Controller
 
         public SectionData sectionData = new SectionData();
 
-        private System.Timers.Timer timer;
+        public System.Timers.Timer timer;
 
         public event DriverEvent Driverschanged;
 
@@ -96,6 +96,7 @@ namespace Controller
 
             _random = new Random(DateTime.Now.Millisecond);
             SetTimer();
+            time.Start();
         }
 
         public void SetTimer()
@@ -151,6 +152,7 @@ namespace Controller
             }
         }
 
+        //
         public void Start()
         {
             timer.Start();
@@ -162,12 +164,12 @@ namespace Controller
             {
                 Random random = new Random();
                 int broken = random.Next(1, 13);
-                int notBroken = random.Next(1, 2);
-                if(broken == 4)
+                int notBroken = random.Next(1, 10);
+                if(broken == 4 || broken == 9)
                 {
                     participant.Equipment.IsBroken = true;
                 }
-                else if(notBroken == 1)
+                else if(notBroken >= 3 && notBroken <= 6)
                 {
                     participant.Equipment.IsBroken = false;
                 }
@@ -269,7 +271,7 @@ namespace Controller
                     participant.Lap++;
 
                 }
-
+                //Als de participant nog geen 2 laps heeft gemaakt, mag hij nog een lap maken
                 if (participant.Lap < 2)
                 {
                     Section[] sections = Track.Sections.ToArray();
@@ -301,7 +303,7 @@ namespace Controller
                     }
 
                 }
-
+                //Als de participant 2 laps heeft gemaakt, stopt hij met racen
                 else if(participant.Lap == 2 && participant.Podium == 0)
                 {
                     place += 1;
