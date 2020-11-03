@@ -12,7 +12,7 @@ using System.Transactions;
 namespace Controller
 {
     public delegate void TimerEvent(object sender, EventArgs eventArgs);
-    public delegate void DriverEvent(object sender, DriversChangedEventArgs eventArgs);
+    public delegate void DriverEvent(object sender, EventArgs eventArgs);
     public delegate Dictionary<string, int> RaceFinishedEvent(Dictionary<string, int> score);
     public delegate void StartNewRaceEvent();
     public class Race

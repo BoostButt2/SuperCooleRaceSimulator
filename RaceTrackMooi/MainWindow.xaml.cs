@@ -27,27 +27,17 @@ namespace RaceTrackMooi
     public partial class MainWindow : Window
     {
         public Track properTrack;
+
+        private RaceStats raceStats;
+        private DriverStats driverStats;
+
         public MainWindow()
         {
+
+            Data.Initialize();
+            Data.NextRace();
+
             InitializeComponent();
-            SectionTypes[] properSections = { SectionTypes.StartGrid, SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.StraightVertical, SectionTypes.LeftCorner, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.SuperRightCorner, SectionTypes.StraightVertical, SectionTypes.SuperLeftCorner, SectionTypes.Finish };
-            properTrack = new Track("Proper racetrack", properSections);
-
-            Driver dimitri = new Driver("Dimitri");
-            Driver totoro = new Driver("Totoro");
-            Driver megumin = new Driver("Megumin");
-
-            dimitri.TeamColor = TeamColors.Lime;
-            totoro.TeamColor = TeamColors.Orange;
-            megumin.TeamColor = TeamColors.Pink;
-
-
-            List<IParticipant> drivers = new List<IParticipant>();
-            drivers.Add(dimitri);
-            drivers.Add(totoro);
-            drivers.Add(megumin);
-            Race properRace = new Race(properTrack, drivers);
-
             StartRace();
 
         }
@@ -66,14 +56,31 @@ namespace RaceTrackMooi
 
         public void AnEventHandler(object sender, EventArgs e)
         {
-                       this.StartGrid1.Dispatcher.BeginInvoke(
+                       this.EmptyImage.Dispatcher.BeginInvoke(
             DispatcherPriority.Send,
             new Action(() =>
             {
-                this.StartGrid1.Source = null;
-                this.StartGrid1.Source = VisualisationMooi.DrawTrack(Data.CurrentRace.Track);
+                this.EmptyImage.Source = null;
+                this.EmptyImage.Source = VisualisationMooi.DrawTrack(Data.CurrentRace.Track);
             }));
 
+        }
+
+        private void MenuItem_RaceStats_Click(object sender, RoutedEventArgs e)
+        {
+            raceStats = new RaceStats();
+            raceStats.Show();
+        }
+
+        private void MenuItem_DriverStats_Click(object sender, RoutedEventArgs e)
+        {
+            driverStats = new DriverStats();
+            driverStats.Show();
+        }
+
+        private void MenuItem_Exit_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }

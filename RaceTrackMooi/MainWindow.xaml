@@ -6,18 +6,26 @@
         xmlns:local="clr-namespace:RaceTrackMooi"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid Background="DarkGreen" >
-        <Image Name="StartGrid1"/>
+    <Window.DataContext>
+        <local:DataContext/>
+    </Window.DataContext>
 
-        <DockPanel>
+    <Grid Background="DarkGreen" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="103*"/>
+            <ColumnDefinition Width="697*"/>
+        </Grid.ColumnDefinitions>
+
+        <DockPanel Grid.ColumnSpan="2">
             <Menu DockPanel.Dock="Top" Height="20" VerticalAlignment="Top" >
-                <MenuItem Background="Transparent" BorderBrush="Transparent" Header="Menu">
-                    <MenuItem Header="Race stats"/>
-                    <MenuItem Header="Driver stats"/>
-                    <MenuItem Header="Close"/>
+                <MenuItem Background="Transparent" BorderBrush="Transparent" Header="Menu" IsCheckable="True">
+                    <MenuItem Header="Race stats" Click="MenuItem_RaceStats_Click"/>
+                    <MenuItem Header="Driver stats" Click="MenuItem_DriverStats_Click"/>
+                    <MenuItem Header="Close" Click="MenuItem_Exit_Click"/>
                 </MenuItem>
 
             </Menu>
+            <Image Name="EmptyImage" Grid.ColumnSpan="2" VerticalAlignment="Top"/>
         </DockPanel>
 
     </Grid>

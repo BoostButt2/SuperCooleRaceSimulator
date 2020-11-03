@@ -20,16 +20,20 @@ namespace Controller
             addTrack();
         }
 
+        //Slaat de prestaties op van de racers
         public static void SetScores()
         {
             foreach (Driver participant in CurrentRace.Participants)
             {
+                //Punten
                 Dictionary<string, int> points = new Dictionary<string, int>();
                 points.Add(participant.Result.Name, participant.Result.Points);
 
+                //Tijd
                 Dictionary<string, TimeSpan> time = new Dictionary<string, TimeSpan>();
                 time.Add(participant.laptime.Name, participant.laptime.Time);
 
+                //Finish positie(1e, 2e, 3e, 4e)
                 Dictionary<string, int> position = new Dictionary<string, int>();
                 position.Add(participant.Name, participant.Podium);
 
@@ -39,6 +43,7 @@ namespace Controller
             }
         }
 
+        //Voegt de racers toe aan de race
         public static void AddParticipant()
         {
             Driver putin = new Driver("Putin");
@@ -56,18 +61,23 @@ namespace Controller
             Driver rasputin = new Driver("Rasputin");
             rasputin.TeamColor = TeamColors.Lime;
             competition.Participants.Add(rasputin);
-
         }
 
+        //Voegt de tracks toe aan de competitie
         public static void addTrack()
         {
+            SectionTypes[] properSections = { SectionTypes.StartGrid, SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.StraightVertical, SectionTypes.LeftCorner, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.SuperRightCorner, SectionTypes.StraightVertical, SectionTypes.SuperLeftCorner, SectionTypes.Finish };
+            Track properTrack = new Track("Proper racetrack", properSections);
+
             SectionTypes[] sections = { SectionTypes.StartGrid, SectionTypes.StartGrid, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.StraightVertical, SectionTypes.StraightVertical, SectionTypes.SuperRightCorner, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.LeftCorner, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.SuperRightCorner, SectionTypes.StraightVertical, SectionTypes.StraightVertical, SectionTypes.StraightVertical, SectionTypes.SuperLeftCorner, SectionTypes.Finish };
 
             Track hardTrack = new Track("Hard track", sections);
 
+            competition.Tracks.Enqueue(properTrack);
             competition.Tracks.Enqueue(hardTrack);
         }
 
+        //Roept een race aan
         public static void NextRace()
         {
                 CurrentRace = new Race(competition.NextTrack(), competition.Participants);            

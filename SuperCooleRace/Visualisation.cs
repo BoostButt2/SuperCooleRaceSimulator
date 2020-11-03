@@ -475,7 +475,7 @@ namespace SuperCooleRace
         }
 
 
-        public static void OnDriversChanged(object sender, DriversChangedEventArgs e)
+        public static void OnDriversChanged(object sender, EventArgs e)
         {
             Console.Clear();
             Console.WriteLine(Data.CurrentRace.Track.Name);
