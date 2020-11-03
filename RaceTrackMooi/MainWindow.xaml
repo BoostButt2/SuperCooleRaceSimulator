@@ -20,7 +20,7 @@
         </Grid.RowDefinitions>
 
         <DockPanel Grid.ColumnSpan="2" Grid.Row="0">
-            <Menu DockPanel.Dock="Top" Height="20" VerticalAlignment="Top" >
+            <Menu DockPanel.Dock="Top" Height="20" VerticalAlignment="Top" Background="DarkGray">
                 <MenuItem Background="Transparent" BorderBrush="Transparent" Header="Menu">
                     <MenuItem Header="Race stats" Click="MenuItem_RaceStats_Click"/>
                     <MenuItem Header="Driver stats" Click="MenuItem_DriverStats_Click"/>

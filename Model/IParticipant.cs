@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Model
 {
+    //Teamkleuren wijken af van origineel
     public enum TeamColors
     {
         Pink,

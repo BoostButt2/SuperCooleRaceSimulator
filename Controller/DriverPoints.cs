@@ -6,7 +6,7 @@ namespace Controller
 {
     public class DriverPoints : RaceData<Dictionary<string, int>>
     {
-        public int something { get; set; }
+
         private List<Dictionary<string, int>> _list = new List<Dictionary<string, int>>();
         public void AddList(Dictionary<string, int> value)
         {

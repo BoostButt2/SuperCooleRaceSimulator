@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Model
 {
+    //Aantal punten die een speler scoort
     public class Results
     {
         public string Name { get; set; }

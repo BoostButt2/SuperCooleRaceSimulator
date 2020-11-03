@@ -37,6 +37,8 @@ namespace Controller
         public bool raceStoppen = false;
 
         private int place = 0;
+
+        //Voor de laptime
         private Stopwatch time = new Stopwatch();
 
         private DriversChangedEventArgs driversChangedEventArgs = new DriversChangedEventArgs();
@@ -152,11 +154,6 @@ namespace Controller
             }
         }
 
-        //
-        public void Start()
-        {
-            timer.Start();
-        }
         
         public void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
@@ -235,6 +232,7 @@ namespace Controller
             return eindstand;
         }
 
+        //Zorgt ervoor dat elke driver individueel van elkaar kan bewegen
         public void MoveCurrentSection()
         {
             //Maakt alle posities van alle sections leeg

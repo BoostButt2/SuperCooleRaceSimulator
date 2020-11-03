@@ -20,17 +20,18 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="6*"/>
             <RowDefinition Height="6*"/>
-
         </Grid.RowDefinitions>
+
+        <Rectangle Grid.Row="1" Fill="Gray" Grid.ColumnSpan="3" Grid.RowSpan="3"/>
 
         <Label Grid.Column="0" Grid.Row="0" Content="{Binding TrackName}"/>
         <Label Grid.Column="0" Grid.Row="1" Content="Laptimes" HorizontalAlignment="Center"/>
         <Label Grid.Column="1" Grid.Row="1" Content="Points" HorizontalAlignment="Center"/>
         <Label Grid.Column="2" Grid.Row="1" Content="Result" HorizontalAlignment="Center"/>
         
-        <ListView Width="250" Height="180" ItemsSource="{Binding Laptimes}" Grid.Row="2" VerticalAlignment="Top"></ListView>
-        <ListView Width="250" Height="180" ItemsSource="{Binding Points}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Top"></ListView>
-        <ListView Width="250" Height="180" ItemsSource="{Binding Podium}" Grid.Row="2" Grid.Column="2" VerticalAlignment="Top"></ListView>
+        <ListView Width="250" Height="180" ItemsSource="{Binding Laptimes}" Grid.Row="2" VerticalAlignment="Top" Background="LightGray"></ListView>
+        <ListView Width="250" Height="180" ItemsSource="{Binding Points}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Top" Background="LightGray"></ListView>
+        <ListView Width="250" Height="180" ItemsSource="{Binding Podium}" Grid.Row="2" Grid.Column="2" VerticalAlignment="Top" Background="LightGray"></ListView>
 
     </Grid>
 </Window>

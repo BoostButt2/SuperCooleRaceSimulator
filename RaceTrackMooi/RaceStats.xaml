@@ -21,7 +21,8 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="10*"/>
         </Grid.RowDefinitions>
+        <Rectangle Fill="Gray" Grid.ColumnSpan="2"/>
         <Label VerticalAlignment="Top" Content="{Binding TrackName}" Grid.Row= "0"></Label>
-        <ListView Width="250" Height="180" ItemsSource="{Binding Drivers}" Grid.Row="1" VerticalAlignment="Top"></ListView>
+        <ListView Width="250" Height="180" ItemsSource="{Binding Drivers}" Grid.Row="1" VerticalAlignment="Top" Background="LightGray"></ListView>
     </Grid>
 </Window>

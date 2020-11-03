@@ -5,6 +5,7 @@ using Model;
 
 namespace Controller
 {
+    //Ik snap deze klasse niet
     public class RaceData<T> : Interface1<T>
     {
         public T something { get; set; }

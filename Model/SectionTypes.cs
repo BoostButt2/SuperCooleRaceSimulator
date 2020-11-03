@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Model
 {
+    //Er zijn nieuwe sectiontypes toegevoegd om het maken van een baan makkelijker te maken
     public enum SectionTypes
     {
         Straight,
