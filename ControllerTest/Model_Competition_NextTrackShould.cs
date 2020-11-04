@@ -105,7 +105,11 @@ namespace ControllerTest
             Assert.IsTrue(VisualisationMooi.DrawTrack(testTrack) != null);
         }
 
-
+        [Test]
+        public void GetEindstand_NotNull()
+        {
+            Assert.IsTrue(Data.CurrentRace.getEindstand() != null);
+        }
         
     }
 }
