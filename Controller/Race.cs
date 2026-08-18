@@ -1,13 +1,9 @@
 ﻿using Model;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Timers;
-using System.Transactions;
 
 namespace Controller
 {
@@ -15,323 +11,300 @@ namespace Controller
     public delegate void DriverEvent(object sender, EventArgs eventArgs);
     public delegate Dictionary<string, int> RaceFinishedEvent(Dictionary<string, int> score);
     public delegate void StartNewRaceEvent();
+
     public class Race
     {
+        // Constants
+        private const int TimerIntervalMs = 500;
+        private const int MaxLaps = 2;
+        private const int StartGridCount = 2;
+        private const int BreakdownLowChance = 4;
+        private const int BreakdownHighChance = 9;
+        private const int RepairChanceMin = 3;
+        private const int RepairChanceMax = 6;
+        private const int SpeedHighThreshold = 900;
+        private const int SpeedRange = 999;
+        private const int HighSpeedBonus = 2;
+
+        // Properties
         public Track Track { get; set; }
-        public List<Driver> Participants = new List<Driver>();
+        public List<Driver> Participants { get; set; } = new List<Driver>();
         public DateTime StartTime { get; set; }
+        public Dictionary<Section, SectionData> Positions { get; set; } = new Dictionary<Section, SectionData>();
+        public System.Timers.Timer Timer { get; set; }
+        public Queue<Driver> DriversInOrder { get; set; } = new Queue<Driver>();
 
-        private Random _random;
-        public Dictionary<Section, SectionData> _positions = new Dictionary<Section, SectionData>();
-
-        public SectionData sectionData = new SectionData();
-
-        public System.Timers.Timer timer;
-
-        public event DriverEvent Driverschanged;
-
-        //Zorgt ervoor dat er een tweede race wordt aangeroepen als de huidige race voorbij is
+        // Events
+        public event DriverEvent DriversChanged;
         public event StartNewRaceEvent NewRaceEvent;
 
-        private int baanTeller = 1;
-        public bool raceStoppen = false;
-
-        private int place = 0;
-
-        //Voor de laptime
-        private Stopwatch time = new Stopwatch();
-
-        private DriversChangedEventArgs driversChangedEventArgs = new DriversChangedEventArgs();
-        private List<Driver> eindstand = new List<Driver>();
-        public Queue<Driver> driverInOrder = new Queue<Driver>();
-        public bool KondigAan = false;
-
-        public List<int> TestList = new List<int>();
-        
-        public Race(Track t, List<IParticipant> IP)
+        // Private Fields
+        private readonly Random _random;
+        private readonly Stopwatch _stopwatch = new Stopwatch();
+        private readonly DriversChangedEventArgs _driversChangedEventArgs = new DriversChangedEventArgs();
+        private readonly List<Driver> _finalStandings = new List<Driver>();
+        private int _activeDriverCount = 0;
+        private int _finishPlace = 0;
+        private bool _shouldStopRace = false;
+        public bool KondigAan { get; set; } = false;
+        public Race(Track track, List<IParticipant> participants)
         {
             Data.CurrentRace = this;
-            this.Track = t;
-            driversChangedEventArgs.track = t;
+            Track = track;
+            _driversChangedEventArgs.track = track;
+            _random = new Random(DateTime.Now.Millisecond);
 
-            //Vult de _positions dictionary
-            foreach (Section sect in t.Sections)
+            InitializePositions(track);
+            PlaceParticipantsOnGrid(track, participants);
+            SetTimer();
+            _stopwatch.Start();
+        }
+
+        private void InitializePositions(Track track)
+        {
+            foreach (Section section in track.Sections)
             {
-                GetSectionData(sect);
+                GetSectionData(section);
             }
+        }
 
-            //Plaatst elke racer op de startgrid
-            int teller = 0;
-            Section[] hulpArray = Track.Sections.ToArray();
-            foreach(Driver participant in IP)
-            {                
-                if(teller < 2)
+        private void PlaceParticipantsOnGrid(Track track, List<IParticipant> participants)
+        {
+            Section[] sections = track.Sections.ToArray();
+            int count = 0;
+
+            foreach (Driver participant in participants)
+            {
+                if (count < StartGridCount)
                 {
                     participant.Position = 1;
-                    if (_positions[hulpArray[1]].Left == null)
-                    {
-                        _positions[hulpArray[1]].Left = participant;
-                    }
-
-                    else if (_positions[hulpArray[1]].Right == null)
-                    {
-                        _positions[hulpArray[1]].Right = participant;
-                    }
-
+                    PlaceDriverInSection(sections[1], participant);
                 }
                 else
                 {
                     participant.Position = 0;
-                    if (_positions[hulpArray[0]].Left == null)
-                    {
-                        _positions[hulpArray[0]].Left = participant;
-                    }
-
-                    else if (_positions[hulpArray[0]].Right == null)
-                    {
-                        _positions[hulpArray[0]].Right = participant;
-                    }
+                    PlaceDriverInSection(sections[0], participant);
                 }
+                
                 Participants.Add(participant);
-                teller++;
+                count++;
             }
+        }
 
-            _random = new Random(DateTime.Now.Millisecond);
-            SetTimer();
-            time.Start();
+        private void PlaceDriverInSection(Section section, Driver participant)
+        {
+            SectionData sectionData = GetSectionData(section);
+            
+            if (sectionData.Left == null)
+            {
+                sectionData.Left = participant;
+            }
+            else if (sectionData.Right == null)
+            {
+                sectionData.Right = participant;
+            }
         }
 
         public void SetTimer()
         {
-            timer = new System.Timers.Timer(500);
-            timer.Elapsed += OnTimedEvent;
-            timer.AutoReset = true;
-            timer.Enabled = true;
-            Stopwatch.StartNew();
+            Timer = new System.Timers.Timer(TimerIntervalMs);
+            Timer.Elapsed += OnTimedEvent;
+            Timer.AutoReset = true;
+            Timer.Enabled = true;
         }
 
-
-        public SectionData GetSectionData(Section s)
+        public SectionData GetSectionData(Section section)
         {
-            try
+            if (Positions.ContainsKey(section))
             {
-                return _positions[s];
+                return Positions[section];
             }
-            catch(Exception e)
-            {
-                _positions.Add(s, new SectionData());
-                return _positions[s];
-            }
+
+            Positions.Add(section, new SectionData());
+            return Positions[section];
         }
 
         public void RandomizeEquipment()
         {
-            foreach(IParticipant driver in Data.competition.Participants)
+            foreach (IParticipant driver in Data.competition.Participants)
             {
                 driver.Equipment.Quality = _random.Next();
                 driver.Equipment.Performance = _random.Next();
             }
         }
 
-
-        //kijk of er een startgrid is, 
-        public void placeParticipant(Track track, Driver participant)
+        public void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
-            if (sectionData.Left == null)
+            UpdateEquipmentStatus();
+            MoveCurrentSection();
+            UpdateActiveDriverCount();
+
+            DriversChanged?.Invoke(sender, _driversChangedEventArgs);
+
+            if (_activeDriverCount == 0)
             {
-                sectionData.Left = participant;
-            }
-            if (sectionData.Left != null)
-            {
-                sectionData.Right = participant;
-            }
-            foreach (Section sect in track.Sections)
-            {
-                if (sect.SectionType == SectionTypes.StartGrid)
-                {
-                    _positions.Add(sect, sectionData);
-                }
+                EndRace();
             }
         }
 
-        
-        public void OnTimedEvent(object sender, ElapsedEventArgs e)
+        private void UpdateEquipmentStatus()
         {
-            foreach(Driver participant in Participants)
+            foreach (Driver participant in Participants)
             {
-                Random random = new Random();
-                int broken = random.Next(1, 13);
-                int notBroken = random.Next(1, 10);
-                if(broken == 4 || broken == 9)
+                int breakdownChance = _random.Next(1, 13);
+                int repairChance = _random.Next(1, 10);
+
+                if (breakdownChance == BreakdownLowChance || breakdownChance == BreakdownHighChance)
                 {
                     participant.Equipment.IsBroken = true;
                 }
-                else if(notBroken >= 3 && notBroken <= 6)
+                else if (repairChance >= RepairChanceMin && repairChance <= RepairChanceMax)
                 {
                     participant.Equipment.IsBroken = false;
                 }
             }
+        }
 
-
-            MoveCurrentSection();
-
-            baanTeller = 0;
-
-            //Kijkt of er nog iemand op de baan is
-            foreach (KeyValuePair<Section, SectionData> entry in _positions)
+        private void UpdateActiveDriverCount()
+        {
+            _activeDriverCount = 0;
+            foreach (KeyValuePair<Section, SectionData> entry in Positions)
             {
                 if (entry.Value.Right != null || entry.Value.Left != null)
                 {
-                    baanTeller++;
+                    _activeDriverCount++;
                 }
             }
-
-            if(baanTeller == 0)
-            {
-                KondigAan = true;
-            }
-
-
-            Driverschanged(sender, driversChangedEventArgs);
-
-            //Als her niemand op de baan is, wordt de timed event stopgezet
-            if (baanTeller == 0)
-            {
-                if (raceStoppen)
-                {
-                    Driverschanged = delegate { };
-                    timer.Enabled = false;
-                    Data.competition.givePoints(getEindstand());
-                    Data.SetScores();
-                }
-                else
-                {
-                    Driverschanged = delegate { };
-                    timer.Enabled = false;
-                    time.Stop();
-
-                    Data.competition.givePoints(getEindstand());
-                    Data.SetScores();
-
-                    Data.Initialize();
-                    Data.NextRace();
-                    Data.CurrentRace.raceStoppen = true;
-                    NewRaceEvent();
-                }
-
-            }
-
         }
 
-        public List<Driver> getEindstand()
+        private void EndRace()
         {
-            foreach(Driver participant in Data.CurrentRace.Participants)
-            {                
-                eindstand.Add(participant);
+            Timer.Enabled = false;
+            DriversChanged = null;
+            _stopwatch.Stop();
+            KondigAan = true;
+            Data.competition.givePoints(GetFinalStandings());
+            Data.SetScores();
+
+            if (!_shouldStopRace)
+            {
+                Data.Initialize();
+                Data.NextRace();
+                Data.CurrentRace._shouldStopRace = true;
+                NewRaceEvent?.Invoke();
             }
-            return eindstand;
         }
 
-        //Zorgt ervoor dat elke driver individueel van elkaar kan bewegen
-        public void MoveCurrentSection()
+        public List<Driver> GetFinalStandings()
         {
-            //Maakt alle posities van alle sections leeg
-            foreach(KeyValuePair<Section, SectionData> entry in _positions)
+            foreach (Driver participant in Data.CurrentRace.Participants)
+            {
+                _finalStandings.Add(participant);
+            }
+            return _finalStandings;
+        }
+
+        private void MoveCurrentSection()
+        {
+            ClearAllPositions();
+            MoveAllDrivers();
+        }
+
+        private void ClearAllPositions()
+        {
+            foreach (KeyValuePair<Section, SectionData> entry in Positions)
             {
                 entry.Value.Left = null;
                 entry.Value.Right = null;
             }
-
-            
-            foreach (Driver participant in Participants)
-            {
-                if (participant.Equipment.IsBroken == false)
-                {
-                    //Bepaalt hoeveel stappen een racer mag zetten
-                    int speed = new Random().Next(0, 999);
-                    Random random = new Random();
-                    if (speed < 900)
-                    {
-                        participant.Position += random.Next(1, 3);
-                    }
-
-                    if (speed >= 900)
-                    {
-                        participant.Position += 2;
-                    }
-                }
-
-
-                //Als de racer een hele lap heeft gemaakt, moet hij beginnen aan een nieuwe lap
-                if (participant.Position > Track.Sections.Count - 1)
-                {
-                    participant.Position = participant.Position - (Track.Sections.Count - 1);
-                    participant.Lap++;
-
-                }
-                //Als de participant nog geen 2 laps heeft gemaakt, mag hij nog een lap maken
-                if (participant.Lap < 2)
-                {
-                    Section[] sections = Track.Sections.ToArray();
-
-                    if (_positions[sections[participant.Position]].Left == null)
-                    {
-                        _positions[sections[participant.Position]].Left = participant;
-                    }
-
-                    else if (_positions[sections[participant.Position]].Right == null)
-                    {
-                        _positions[sections[participant.Position]].Right = participant;
-                    }
-
-                    else if (_positions[sections[participant.Position]].Right != null && _positions[sections[participant.Position]].Left != null)
-                    {
-                        participant.Position++;
-
-                        if (_positions[sections[participant.Position]].Left == null)
-                        {
-                            _positions[sections[participant.Position]].Left = participant;
-                        }
-
-                        else
-                        {
-                            _positions[sections[participant.Position]].Right = participant;
-                        }
-
-                    }
-
-                }
-                //Als de participant 2 laps heeft gemaakt, stopt hij met racen
-                else if(participant.Lap == 2 && participant.Podium == 0)
-                {
-                    place += 1;
-                    if (place == 1)
-                    {
-                        participant.Podium = place;
-                    }
-                    if (place == 2)
-                    {
-                        participant.Podium = place;
-                    }
-                    if (place == 3)
-                    {
-                        participant.Podium = place;
-                    }
-                    else
-                    {
-                        participant.Podium = place;
-                    }
-                    time.Stop();
-                    participant.laptime.Time = time.Elapsed;
-                    time.Start();
-
-                    participant.laptime.Name = participant.Name;
-                    driverInOrder.Enqueue(participant);
-                }
-            }
-
         }
 
-    }
+        private void MoveAllDrivers()
+        {
+            Section[] sections = Track.Sections.ToArray();
 
+            foreach (Driver participant in Participants)
+            {
+                if (!participant.Equipment.IsBroken)
+                {
+                    MoveDriver(participant);
+                }
+
+                if (participant.Lap < MaxLaps)
+                {
+                    PlaceDriverOnTrack(sections, participant);
+                }
+                else if (participant.Lap == MaxLaps && participant.Podium == 0)
+                {
+                    FinishDriver(participant);
+                }
+            }
+        }
+
+        private void MoveDriver(Driver participant)
+        {
+            int speed = _random.Next(0, SpeedRange + 1);
+            
+            if (speed >= SpeedHighThreshold)
+            {
+                participant.Position += HighSpeedBonus;
+            }
+            else
+            {
+                participant.Position += _random.Next(1, 3);
+            }
+
+            if (participant.Position > Track.Sections.Count - 1)
+            {
+                participant.Position = participant.Position - (Track.Sections.Count - 1);
+                participant.Lap++;
+            }
+        }
+
+        private void PlaceDriverOnTrack(Section[] sections, Driver participant)
+        {
+            Section currentSection = sections[participant.Position];
+            SectionData sectionData = Positions[currentSection];
+
+            if (sectionData.Left == null)
+            {
+                sectionData.Left = participant;
+            }
+            else if (sectionData.Right == null)
+            {
+                sectionData.Right = participant;
+            }
+            else
+            {
+                MoveDriverToNextAvailableSection(sections, participant);
+            }
+        }
+
+        private void MoveDriverToNextAvailableSection(Section[] sections, Driver participant)
+        {
+            participant.Position++;
+            Section nextSection = sections[participant.Position];
+            SectionData nextSectionData = Positions[nextSection];
+
+            if (nextSectionData.Left == null)
+            {
+                nextSectionData.Left = participant;
+            }
+            else
+            {
+                nextSectionData.Right = participant;
+            }
+        }
+
+        private void FinishDriver(Driver participant)
+        {
+            _finishPlace++;
+            participant.Podium = _finishPlace;
+            _stopwatch.Stop();
+            participant.laptime.Time = _stopwatch.Elapsed;
+            _stopwatch.Start();
+            participant.laptime.Name = participant.Name;
+            DriversInOrder.Enqueue(participant);
+        }
+    }
 }
